@@ -4,6 +4,8 @@ import * as yup from "yup";
 import Header from "components/Header/index";
 import "./styles.scss";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { register } from './actions';
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -13,9 +15,15 @@ const schema = yup.object().shape({
   name: yup.string().required()
 });
 
+export interface RegisterForm {
+  email: string;
+  password: string;
+}
+
 const Register = () => {
-  const handleSubmit = () => {
-    console.log(123);
+  const dispatch = useDispatch();
+  const handleSubmit = (values: RegisterForm) => {
+    dispatch(register(values));
   };
   return (
     <div className="register">
@@ -104,6 +112,19 @@ const Register = () => {
         <div>
           Đã có Tài khoản?{" "}
           <Link className="link" to="/login">Đăng ký</Link>
+        </div>
+      </div>
+      <div className="policy">
+        Bằng cách tiếp tục, bạn đồng ý với{" "}
+        <a className="link" href="https://policy.pinterest.com/vi/terms-of-service" target="_blank">
+          Điều khoản dịch vụ
+        </a>{" "}
+        của Pinterest và xác nhận rằng bạn đã đọc{" "}
+        <div>
+          <a className="link" href="/https://policy.pinterest.com/vi/privacy-policy" target="_blank">
+            Chính sách Quyền riêng tư
+          </a>{" "}
+          của chúng tôi
         </div>
       </div>
     </div>

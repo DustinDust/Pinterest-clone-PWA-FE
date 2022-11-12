@@ -3,6 +3,8 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
 import Header from "components/Header/index";
+import { useDispatch } from 'react-redux';
+import { login } from "./actions";
 import "./styles.scss";
 
 const schema = yup.object().shape({
@@ -10,16 +12,22 @@ const schema = yup.object().shape({
   password: yup.string().required()
 });
 
+export interface LoginForm {
+  email: string;
+  password: string;
+}
+
 const Login = () => {
-  const handleSubmit = () => {
-    console.log(123);
+  const dispatch = useDispatch();
+  const handleSubmit = (values: LoginForm) => {
+    dispatch(login(values));
   };
   return (
     <div className="login">
       <Header />
       <Formik
         validationSchema={schema}
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "", password: "" } as LoginForm}
         onSubmit={handleSubmit}
       >
         {({
@@ -56,7 +64,11 @@ const Login = () => {
               <div className="feedback">Hãy điền mật khẩu của bạn</div>
             )}
             <div className="forgot-password">Quên mật khẩu?</div>
-            <button type="submit" className={`button ${isValid && "valid"}`} disabled={!isValid}>
+            <button
+              type="submit"
+              className={`button ${isValid && "valid"}`}
+              disabled={!isValid}
+            >
               Đăng nhập
             </button>
           </form>
@@ -65,7 +77,22 @@ const Login = () => {
       <div className="register">
         <div>
           Chưa có Tài khoản?{" "}
-          <Link className="link" to="/register">Đăng ký</Link>
+          <Link className="link" to="/register">
+            Đăng ký
+          </Link>
+        </div>
+      </div>
+      <div className="policy">
+        Bằng cách tiếp tục, bạn đồng ý với{" "}
+        <a className="link" href="https://policy.pinterest.com/vi/terms-of-service" target="_blank">
+          Điều khoản dịch vụ
+        </a>{" "}
+        của Pinterest và xác nhận rằng bạn đã đọc{" "}
+        <div>
+          <a className="link" href="/https://policy.pinterest.com/vi/privacy-policy" target="_blank">
+            Chính sách Quyền riêng tư
+          </a>{" "}
+          của chúng tôi
         </div>
       </div>
     </div>
