@@ -36,7 +36,6 @@ export const createReducer = <T>(success: string, failure: string, clear?: strin
     error?: Record<string, unknown | string | number | null>;
     componentId?: string;
     fromCallback?: boolean;
-    lastUpdate?: Date;
   } | null => {
     if (arg.length) {
       for (let index = 0; index < arg.length; index++) {
@@ -48,7 +47,7 @@ export const createReducer = <T>(success: string, failure: string, clear?: strin
     }
     switch (action.type) {
       case success:
-        return { ...action.payload, success: true, lastUpdate: new Date() };
+        return { ...action.payload, success: true };
       case failure:
         return { ...action.payload, response: undefined, success: false };
       case clear:

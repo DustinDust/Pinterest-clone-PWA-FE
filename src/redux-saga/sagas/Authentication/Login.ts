@@ -1,7 +1,7 @@
 import axios from "axios";
 import { put, takeLatest, call } from "redux-saga/effects";
 import { Request } from "interfaces";
-import { AUTH_LOGIN } from './../../actions';
+import { AUTH_LOGIN } from "./../../actions";
 
 const signupUrl = `${process.env.REACT_APP_REST_ENDPOINT}/auth/sign-in`;
 
@@ -17,12 +17,19 @@ function* doLogin(request: Request<Record<string, unknown>>): any {
       payload: {
         request: request.payload,
         componentId: request.componentId,
-        response,
-      },
+        response: response.data,
+      }
     });
   } catch (error) {
     console.log(error);
-    yield put({ type: request.response?.failure?.type, loading: false, error });
+    yield put({
+      type: request.response?.failure?.type,
+      loading: false,
+      payload: {
+        request: request.payload,
+        componentId: request.componentId,
+      }
+    });
   }
 }
 

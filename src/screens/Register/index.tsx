@@ -8,16 +8,18 @@ import { useDispatch } from "react-redux";
 import { register } from './actions';
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
+  username: yup.string().required(),
   password: yup.string().required(),
-  passwordConfirm: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
-  age: yup.string().required(),
-  name: yup.string().required()
+  repass: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+  displayName: yup.string().required()
 });
 
 export interface RegisterForm {
-  email: string;
+  username: string;
   password: string;
+  repass: string;
+  displayName: string;
+  avatarUrl: string;
 }
 
 const Register = () => {
@@ -30,7 +32,7 @@ const Register = () => {
       <Header />
       <Formik
         validationSchema={schema}
-        initialValues={{ email: "", password: "", passwordConfirm: "", age:"", name:"" }}
+        initialValues={{ username: "", password: "", repass: "", displayName:"", avatarUrl: "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg" }}
         onSubmit={handleSubmit}
       >
         {({
@@ -43,40 +45,28 @@ const Register = () => {
         }) => (
           <form className="form" onSubmit={handleSubmit}>
             <input
-              name="name"
+              name="displayName"
               type="text"
-              onChange={handleChange("name")}
-              onBlur={handleBlur("name")}
-              value={values.name}
+              onChange={handleChange("displayName")}
+              onBlur={handleBlur("displayName")}
+              value={values.displayName}
               placeholder="Họ tên"
-              className={`input ${errors.name && "error"}`}
+              className={`input ${errors.displayName && "error"}`}
             />
-            {errors.name && (
+            {errors.displayName && (
               <div className="feedback">Hãy nhập họ tên của bạn.</div>
             )}
             <input
-              name="age"
-              type="number"
-              onChange={handleChange("age")}
-              onBlur={handleBlur("age")}
-              value={values.age}
-              placeholder="Tuổi của bạn"
-              className={`input ${errors.age && "error"}`}
+              name="username"
+              type="username"
+              onChange={handleChange("username")}
+              onBlur={handleBlur("username")}
+              value={values.username}
+              placeholder="Tên đăng nhập"
+              className={`input ${errors.username && "error"}`}
             />
-            {errors.age && (
-              <div className="feedback">Hãy nhập tuổi của bạn.</div>
-            )}
-            <input
-              name="email"
-              type="email"
-              onChange={handleChange("email")}
-              onBlur={handleBlur("email")}
-              value={values.email}
-              placeholder="Email"
-              className={`input ${errors.email && "error"}`}
-            />
-            {errors.email && (
-              <div className="feedback">Email trống hoặc không hợp lệ.</div>
+            {errors.username && (
+              <div className="feedback">Hãy nhập tên đăng nhập của bạn.</div>
             )}
             <input
               type="password"
@@ -92,18 +82,18 @@ const Register = () => {
             )}
             <input
               type="password"
-              onChange={handleChange("passwordConfirm")}
-              onBlur={handleBlur("passwordConfirm")}
-              value={values.passwordConfirm}
-              name="passwordConfirm"
+              onChange={handleChange("repass")}
+              onBlur={handleBlur("repass")}
+              value={values.repass}
+              name="repass"
               placeholder="Xác nhận mật khẩu"
-              className={`input ${errors.passwordConfirm && "error"}`}
+              className={`input ${errors.repass && "error"}`}
             />
-            {errors.passwordConfirm && (
+            {errors.repass && (
               <div className="feedback">Mật khẩu không trùng khớp</div>
             )}
             <button type="submit" className={`button ${isValid && "valid"}`} disabled={!isValid}>
-              Đăng nhập
+              Đăng ký
             </button>
           </form>
         )}
@@ -111,7 +101,7 @@ const Register = () => {
       <div className="register">
         <div>
           Đã có Tài khoản?{" "}
-          <Link className="link" to="/login">Đăng ký</Link>
+          <Link className="link" to="/login">Đăng nhập</Link>
         </div>
       </div>
       <div className="policy">

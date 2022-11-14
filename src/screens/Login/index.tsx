@@ -8,12 +8,12 @@ import { login } from "./actions";
 import "./styles.scss";
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
+  username: yup.string().required(),
   password: yup.string().required()
 });
 
 export interface LoginForm {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -27,7 +27,7 @@ const Login = () => {
       <Header />
       <Formik
         validationSchema={schema}
-        initialValues={{ email: "", password: "" } as LoginForm}
+        initialValues={{ username: "", password: "" } as LoginForm}
         onSubmit={handleSubmit}
       >
         {({
@@ -40,15 +40,15 @@ const Login = () => {
         }) => (
           <form className="form" onSubmit={handleSubmit}>
             <input
-              name="email"
-              type="email"
-              onChange={handleChange("email")}
-              onBlur={handleBlur("email")}
-              value={values.email}
+              name="username"
+              type="username"
+              onChange={handleChange("username")}
+              onBlur={handleBlur("username")}
+              value={values.username}
               placeholder="Email"
-              className={`input ${errors.email && "error"}`}
+              className={`input ${errors.username && "error"}`}
             />
-            {errors.email && (
+            {errors.username && (
               <div className="feedback">Email trống hoặc không hợp lệ.</div>
             )}
             <input
