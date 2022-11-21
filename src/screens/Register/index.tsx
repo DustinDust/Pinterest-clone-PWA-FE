@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import Header from "components/Header/index";
+import Header from "components/LogoHeader/index";
 import "./styles.scss";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";

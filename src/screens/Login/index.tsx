@@ -2,7 +2,7 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { Link } from "react-router-dom";
-import Header from "components/Header/index";
+import Header from "components/LogoHeader/index";
 import { useDispatch } from 'react-redux';
 import { login } from "./actions";
 import "./styles.scss";
