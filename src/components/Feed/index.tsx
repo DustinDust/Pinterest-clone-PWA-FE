@@ -4,7 +4,7 @@ import { useViewport } from "hooks";
 import { Masonry } from "masonic";
 import "./styles.scss";
 
-const data = [
+export const data = [
   {
     src: "https://i.pinimg.com/236x/39/4e/28/394e282ff35510fbe7e420b149bc34c4.jpg"
   },
@@ -75,17 +75,13 @@ const Feed = () => {
   const itemWidth =
     viewPort.width <= 600
       ? viewPort.width / 2
-      : viewPort.width <= 800
-      ? viewPort.width / 3
-      : viewPort.width <= 1000
-      ? viewPort.width / 4
-      : viewPort.width / 5;
+      : viewPort.width / (Math.floor(viewPort.width / 200));
   return (
     <div className="masonic">
       <Masonry
         items={data}
         columnGutter={8} // Set khoảng cách giữa các column
-        columnWidth={itemWidth - 24} // Set chiều rộng tối thiểu là 300px
+        columnWidth={itemWidth - 24} // Set chiều rộng tối thiểu
         overscanBy={5} // Giá trị để render trước khi scroll tới
         render={ImageCard} // Grid item của component
       />

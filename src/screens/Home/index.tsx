@@ -1,17 +1,12 @@
 import React from "react";
-// import { Navigate } from "react-router-dom";
-import BottomNavigation, { Tabs } from "components/BottomNavigation";
-import Feed from "components/Feed";
+import { Outlet, useParams } from "react-router-dom";
+import BottomNavigation from "components/BottomNavigation";
 import "./styles.scss";
-import { useParams } from "react-router-dom";
-import Profile from "components/Profile";
 
 const Home = () => {
-  let a = useParams();
-  console.log(a["*"]);
   return (
     <div className="Pinhome">
-      {a["*"] === Tabs.Home ? <Feed /> : <Profile />}
+      <Outlet />
       <BottomNavigation />
     </div>
   );

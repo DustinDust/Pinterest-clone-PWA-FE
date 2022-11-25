@@ -1,17 +1,10 @@
 .board {
-  display: inline-block;
-  .img {
-    width: calc(100% - 8px);
-    margin: 0 auto;
-  }
-  .name {
+  display: flex;
+  flex-direction: column;
+  margin-top: 72px;
+  .board-name {
     font-weight: 600;
-    margin-top: 4px;
-    padding: 0 8px;
-  }
-  .count {
-    margin-top: 4px;
-    padding: 0 8px;
-    font-size: 12px;
+    font-size: 36px;
+    text-align: center;
   }
 }

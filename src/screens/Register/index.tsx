@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Header from "components/LogoHeader/index";
 import "./styles.scss";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { register } from './actions';
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "./actions";
+import { State } from "redux-saga/reducers";
+import { registerResult } from "screens/Register/reducers";
 
 const schema = yup.object().shape({
   username: yup.string().required(),
   password: yup.string().required(),
-  repass: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
+  repass: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
   displayName: yup.string().required()
 });
 
@@ -24,6 +28,17 @@ export interface RegisterForm {
 
 const Register = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const registerResult = useSelector((state: State) => state.registerResult);
+
+  useEffect(() => {
+    if (registerResult && registerResult.success) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      navigate("/login");
+    }
+  }, [registerResult]);
+
   const handleSubmit = (values: RegisterForm) => {
     dispatch(register(values));
   };
@@ -32,7 +47,14 @@ const Register = () => {
       <Header />
       <Formik
         validationSchema={schema}
-        initialValues={{ username: "", password: "", repass: "", displayName:"", avatarUrl: "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg" }}
+        initialValues={{
+          username: "",
+          password: "",
+          repass: "",
+          displayName: "",
+          avatarUrl:
+            "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
+        }}
         onSubmit={handleSubmit}
       >
         {({
@@ -92,7 +114,11 @@ const Register = () => {
             {errors.repass && (
               <div className="feedback">Mật khẩu không trùng khớp</div>
             )}
-            <button type="submit" className={`button ${isValid && "valid"}`} disabled={!isValid}>
+            <button
+              type="submit"
+              className={`button ${isValid && "valid"}`}
+              disabled={!isValid}
+            >
               Đăng ký
             </button>
           </form>
@@ -101,17 +127,27 @@ const Register = () => {
       <div className="register">
         <div>
           Đã có Tài khoản?{" "}
-          <Link className="link" to="/login">Đăng nhập</Link>
+          <Link className="link" to="/login">
+            Đăng nhập
+          </Link>
         </div>
       </div>
       <div className="policy">
         Bằng cách tiếp tục, bạn đồng ý với{" "}
-        <a className="link" href="https://policy.pinterest.com/vi/terms-of-service" target="_blank">
+        <a
+          className="link"
+          href="https://policy.pinterest.com/vi/terms-of-service"
+          target="_blank"
+        >
           Điều khoản dịch vụ
         </a>{" "}
         của Pinterest và xác nhận rằng bạn đã đọc{" "}
         <div>
-          <a className="link" href="/https://policy.pinterest.com/vi/privacy-policy" target="_blank">
+          <a
+            className="link"
+            href="/https://policy.pinterest.com/vi/privacy-policy"
+            target="_blank"
+          >
             Chính sách Quyền riêng tư
           </a>{" "}
           của chúng tôi

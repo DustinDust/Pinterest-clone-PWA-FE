@@ -7,28 +7,28 @@ import "./styles.scss";
 import { useNavigate } from "react-router-dom";
 
 export enum Tabs {
-  Home = "home",
+  Home = "",
   Search = "search",
   Noti = "notifications",
-  Profile = "profile",
+  Profile = "profile"
 }
 
 const tabs = [
   {
     component: Home,
-    path: Tabs.Home,
+    path: Tabs.Home
   },
   {
     component: Search,
-    path: Tabs.Search,
+    path: Tabs.Search
   },
   {
     component: Comment,
-    path: Tabs.Noti,
+    path: Tabs.Noti
   },
   {
     component: Profile,
-    path: Tabs.Profile,
+    path: Tabs.Profile
   }
 ];
 

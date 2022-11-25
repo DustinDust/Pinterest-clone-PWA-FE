@@ -7,4 +7,6 @@ const rootReducer = combineReducers({
     registerResult: registerResult
 })
 
+export type State = ReturnType<typeof rootReducer>;
+
 export default rootReducer;

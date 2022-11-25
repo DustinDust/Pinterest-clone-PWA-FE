@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "components/LogoHeader/index";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "./actions";
 import "./styles.scss";
+import { State } from "redux-saga/reducers";
 
 const schema = yup.object().shape({
   username: yup.string().required(),
@@ -19,6 +20,32 @@ export interface LoginForm {
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const loginResult = useSelector((state: State) => state.loginResult);
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("accessToken") &&
+      localStorage.getItem("refreshToken")
+    ) {
+      navigate("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (loginResult && loginResult.response?.accessToken) {
+      localStorage.setItem(
+        "accessToken",
+        loginResult.response?.accessToken as string
+      );
+      localStorage.setItem(
+        "refreshToken",
+        loginResult.response?.refreshToken as string
+      );
+      navigate("/");
+    }
+  }, [loginResult]);
   const handleSubmit = (values: LoginForm) => {
     dispatch(login(values));
   };
@@ -84,12 +111,20 @@ const Login = () => {
       </div>
       <div className="policy">
         Bằng cách tiếp tục, bạn đồng ý với{" "}
-        <a className="link" href="https://policy.pinterest.com/vi/terms-of-service" target="_blank">
+        <a
+          className="link"
+          href="https://policy.pinterest.com/vi/terms-of-service"
+          target="_blank"
+        >
           Điều khoản dịch vụ
         </a>{" "}
         của Pinterest và xác nhận rằng bạn đã đọc{" "}
         <div>
-          <a className="link" href="/https://policy.pinterest.com/vi/privacy-policy" target="_blank">
+          <a
+            className="link"
+            href="/https://policy.pinterest.com/vi/privacy-policy"
+            target="_blank"
+          >
             Chính sách Quyền riêng tư
           </a>{" "}
           của chúng tôi

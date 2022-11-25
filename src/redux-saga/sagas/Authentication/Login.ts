@@ -17,7 +17,7 @@ function* doLogin(request: Request<Record<string, unknown>>): any {
       payload: {
         request: request.payload,
         componentId: request.componentId,
-        response: response.data,
+        response: response.data
       }
     });
   } catch (error) {
@@ -27,7 +27,7 @@ function* doLogin(request: Request<Record<string, unknown>>): any {
       loading: false,
       payload: {
         request: request.payload,
-        componentId: request.componentId,
+        componentId: request.componentId
       }
     });
   }

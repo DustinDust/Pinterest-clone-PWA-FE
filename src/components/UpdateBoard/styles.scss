@@ -1,0 +1,51 @@
+.update-header {
+  display: flex;
+  padding: 12px 8px;
+  color: #111;
+  .back-icon {
+    padding: 12px;
+    fill: #767676;
+  }
+  .update-name {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+    align-self: center;
+    font-weight: 600;
+    margin-right: 40px;
+  }
+}
+.update-content {
+  .board-item {
+    display: flex;
+    gap: 8px;
+    font-weight: 600;
+    align-items: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+    margin-left: 16px;
+    .board-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+    }
+  }
+  .create-board {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0 0 16px 16px;
+    font-weight: 600;
+    display: flex;
+    .create-icon {
+      padding: 4px;
+      border-radius: 20px;
+      background-color: #e60023;
+      fill: #fff;
+    }
+    .create-icon-text {
+      align-self: center;
+      margin-left: 4px;
+    }
+  }
+}
