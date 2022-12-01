@@ -1,17 +1,17 @@
-import axios from '../BaseApi';
 import { put, takeLatest, call } from "redux-saga/effects";
+import axios from "../BaseApi";
 import { Request } from "interfaces";
-import { AUTH_LOGIN } from "./../../actions";
+import { GET_PROFILE } from "./../../actions";
 
-const signupUrl = `/auth/sign-in`;
+const getProfileUrl = `/user`;
 
-function login(payload: Record<string, unknown>) {
-  return axios.post(signupUrl, payload);
+function getProfile(payload: Record<string, unknown>) {
+  return axios.get(`${getProfileUrl}`);
 }
 
-function* doLogin(request: Request<Record<string, unknown>>): any {
+function* doGetProfile(request: Request<Record<string, unknown>>): any {
   try {
-    const response = yield call(login, request.payload!);
+    const response = yield call(getProfile, request.payload!);
     yield put({
       type: request.response?.success?.type,
       payload: {
@@ -33,6 +33,6 @@ function* doLogin(request: Request<Record<string, unknown>>): any {
   }
 }
 
-export default function* watchLogin() {
-  yield takeLatest(AUTH_LOGIN, doLogin);
+export default function* watchGetProfile() {
+  yield takeLatest(GET_PROFILE, doGetProfile);
 }

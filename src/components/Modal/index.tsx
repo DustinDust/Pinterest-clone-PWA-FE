@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Close } from "assets/svg/close.svg";
 import { ReactComponent as Pin } from "assets/svg/pin.svg";
@@ -15,6 +15,12 @@ interface ModalProps {
 const Modal = ({ inProfile, setIsOpen }: ModalProps) => {
   const navigate = useNavigate();
   const [save, setSave] = useState(false);
+  const [selectedImg, setSelectedImg] = useState<File | undefined>(undefined);
+
+  useEffect(() => {
+    if (selectedImg) navigate("/board/update", { state: { img: selectedImg } });
+  }, [selectedImg]);
+
   return (
     <>
       <div className="modal-background" onClick={() => setIsOpen(false)}></div>
@@ -35,10 +41,9 @@ const Modal = ({ inProfile, setIsOpen }: ModalProps) => {
                   type="file"
                   accept="image/*"
                   className="img-picker"
-                  // style={{
-                  //   opacity: 0; position: absolute; top: 0px; height: 100%; width: 100%;
-                  // }}
-                  onClick={() => navigate("/board/update")}
+                  onChange={(e) => {
+                    if (e.target.files) setSelectedImg(e.target.files[0]);
+                  }}
                 ></input>
               </div>
               <div onClick={() => navigate("/board/create")}>Bảng</div>

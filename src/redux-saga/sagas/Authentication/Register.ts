@@ -3,7 +3,7 @@ import { put, takeLatest, call } from "redux-saga/effects";
 import { Request } from "interfaces";
 import { AUTH_REGISTER } from "./../../actions";
 
-const signupUrl = `${process.env.REACT_APP_REST_ENDPOINT}/auth/sign-up`;
+const signupUrl = `/auth/sign-up`;
 
 function register(payload: Record<string, unknown>) {
   return axios.post(signupUrl, payload);

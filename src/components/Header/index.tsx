@@ -1,10 +1,10 @@
 import React, { createRef, RefObject } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ReactComponent as Add } from "assets/svg/add.svg";
 import { ReactComponent as Setting } from "assets/svg/setting.svg";
 import { ReactComponent as Search } from "assets/svg/search.svg";
 import { ReactComponent as Back } from "assets/svg/back.svg";
-import { ReactComponent as Dot } from "assets/svg/dot.svg";
+import { ReactComponent as Edit } from "assets/svg/edit.svg";
 import { ReactComponent as Share } from "assets/svg/share.svg";
 import "./styles.scss";
 
@@ -17,20 +17,23 @@ interface HeaderProps {
 
 const Header = (props: HeaderProps) => {
   const navigate = useNavigate();
+  const { boardId } = useParams();
   const ref: RefObject<HTMLInputElement> = createRef();
   if (props.inBoard || props.inPin) {
     return (
       <div className="headerCom">
-        <div
-          className="back"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          <Back />
+        <div className="back">
+          <Back
+            onClick={() => {
+              navigate(-1);
+            }}
+          />
         </div>
         <Share className="icon" />
-        <Dot className="icon" />
+        <Edit
+          className="icon"
+          onClick={() => navigate(`/board/${boardId}/edit`)}
+        />
         {props.inPin && <div className="save">Lưu</div>}
       </div>
     );

@@ -1,17 +1,18 @@
-import axios from '../BaseApi';
 import { put, takeLatest, call } from "redux-saga/effects";
+import axios from "../BaseApi";
 import { Request } from "interfaces";
-import { AUTH_LOGIN } from "./../../actions";
+import { DELETE_BOARD } from "./../../actions";
 
-const signupUrl = `/auth/sign-in`;
+const deleteBoardUrl = `/board`;
 
-function login(payload: Record<string, unknown>) {
-  return axios.post(signupUrl, payload);
+function deleteBoard(payload: Record<string, unknown>) {
+  const { boardId } = payload;
+  return axios.delete(`${deleteBoardUrl}/${boardId}`);
 }
 
-function* doLogin(request: Request<Record<string, unknown>>): any {
+function* doDeleteBoard(request: Request<Record<string, unknown>>): any {
   try {
-    const response = yield call(login, request.payload!);
+    const response = yield call(deleteBoard, request.payload!);
     yield put({
       type: request.response?.success?.type,
       payload: {
@@ -33,6 +34,6 @@ function* doLogin(request: Request<Record<string, unknown>>): any {
   }
 }
 
-export default function* watchLogin() {
-  yield takeLatest(AUTH_LOGIN, doLogin);
+export default function* watchDeleteBoard() {
+  yield takeLatest(DELETE_BOARD, doDeleteBoard);
 }

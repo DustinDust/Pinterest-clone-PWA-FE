@@ -1,12 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "components/Header";
 import logo from "assets/images/logo.png";
 import "./styles.scss";
 import { useViewport } from "hooks";
 import BoardCard from "components/BoardCard";
 import Modal from "components/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { State } from "redux-saga/reducers";
+import { getBoards, getProfile } from "./actions";
+
+export interface Profile {
+  id: number;
+  username: string;
+  displayName: string;
+  avatarUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BoardsResponse {
+  id: number;
+  name: string;
+  description: string;
+  visibility: number;
+  createdAt: string;
+  updateAt: string;
+  thumbnail: string | null;
+}
+
+export interface BoardsRequest {
+  userId: number;
+}
 
 const Profile = () => {
+  const dispatch = useDispatch();
+
+  const getProfileResult = useSelector(
+    (state: State) => state.getProfileResult
+  );
+  const profile = getProfileResult?.response as unknown as Profile;
+
+  const getBoardsResult = useSelector((state: State) => state.getBoardsResult);
+  const boards = getBoardsResult?.response as unknown as BoardsResponse[];
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, []);
+
+  useEffect(() => {
+    if (profile) dispatch(getBoards({ userId: profile.id } as BoardsRequest));
+  }, [profile]);
+
   const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
 
@@ -18,10 +62,18 @@ const Profile = () => {
     <div className="profile">
       <Header setIsOpen={setOpen} />
       {open && <Modal setIsOpen={setOpen} inProfile />}
-      <img src={logo} className="avatar" alt=""></img>
-      <div className="user-name">Nam Luong</div>
-      <div className="email">namluong@gmail</div>
-      <div className="rela">0 người theo dõi · 0 người đang theo dõi</div>
+      {profile && (
+        <>
+          <img
+            src={profile.avatarUrl}
+            className="avatar"
+            alt={profile.username}
+          ></img>
+          <div className="user-name">{profile.displayName}</div>
+          <div className="email">{profile.username}</div>
+          <div className="rela">0 người theo dõi · 0 người đang theo dõi</div>
+        </>
+      )}
       <div className="share">Chia sẻ</div>
       <div className="boards">
         <div
@@ -37,11 +89,15 @@ const Profile = () => {
           Đã lưu
         </div>
       </div>
-      <div style={{}}>
-        <BoardCard style={{ width: itemWidth }} />
-        <BoardCard style={{ width: itemWidth }} />
-        <BoardCard style={{ width: itemWidth }} />
-        <BoardCard style={{ width: itemWidth }} />
+      <div style={{ display: "flex", flexWrap: "wrap", paddingBottom: "72px" }}>
+        {boards &&
+          boards.map((board) => (
+            <BoardCard
+              style={{ width: itemWidth }}
+              key={board.id}
+              props={board}
+            />
+          ))}
       </div>
     </div>
   );

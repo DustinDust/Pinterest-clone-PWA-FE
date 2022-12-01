@@ -1,17 +1,18 @@
-import axios from '../BaseApi';
 import { put, takeLatest, call } from "redux-saga/effects";
+import axios from "../BaseApi";
 import { Request } from "interfaces";
-import { AUTH_LOGIN } from "./../../actions";
+import { GET_BOARDS } from "./../../actions";
 
-const signupUrl = `/auth/sign-in`;
+const getBoardsUrl = `/board/user`;
 
-function login(payload: Record<string, unknown>) {
-  return axios.post(signupUrl, payload);
+function getBoards(payload: Record<string, unknown>) {
+  const { userId } = payload;
+  return axios.get(`${getBoardsUrl}/${userId}`);
 }
 
-function* doLogin(request: Request<Record<string, unknown>>): any {
+function* doGetBoards(request: Request<Record<string, unknown>>): any {
   try {
-    const response = yield call(login, request.payload!);
+    const response = yield call(getBoards, request.payload!);
     yield put({
       type: request.response?.success?.type,
       payload: {
@@ -33,6 +34,6 @@ function* doLogin(request: Request<Record<string, unknown>>): any {
   }
 }
 
-export default function* watchLogin() {
-  yield takeLatest(AUTH_LOGIN, doLogin);
+export default function* watchGetBoards() {
+  yield takeLatest(GET_BOARDS, doGetBoards);
 }

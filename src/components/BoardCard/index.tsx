@@ -1,20 +1,35 @@
 import React, { CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
-import './styles.scss'
+import { BoardsResponse } from "components/Profile";
+import "./styles.scss";
 
-const BoardCard = ({ style }: { style: CSSProperties }) => {
-  const navigate = useNavigate()
+const BoardCard = ({
+  style,
+  props
+}: {
+  style: CSSProperties;
+  props: BoardsResponse;
+}) => {
+  const navigate = useNavigate();
   return (
-    <div style={style} className="board" onClick={()=> {
-      navigate("12345");
-    }}>
+    <div
+      style={style}
+      className="board"
+      onClick={() => {
+        navigate(`${props.id}`);
+      }}
+    >
       <img
-        src="https://i.pinimg.com/236x/83/44/79/8344799ccad771b0a1b227ff2e76586f.jpg"
+        src={
+          props.thumbnail
+            ? props.thumbnail
+            : "https://i.pinimg.com/236x/83/44/79/8344799ccad771b0a1b227ff2e76586f.jpg"
+        }
         alt=""
         className="img"
       />
-      <div className="name">Gấu bắc cực</div>
-      <div className="count">2 Ghim</div>
+      <div className="name">{props.name}</div>
+      <div className="count">{props.description}</div>
     </div>
   );
 };
