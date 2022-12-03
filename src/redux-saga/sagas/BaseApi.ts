@@ -44,14 +44,12 @@ instance.interceptors.response.use(
           const { accessToken, refreshToken } = rs.data;
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
-
           return instance(originalConfig);
         } catch (_error) {
           return Promise.reject(_error);
         }
       }
     }
-
     return Promise.reject(err);
   }
 );

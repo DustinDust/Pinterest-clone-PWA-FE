@@ -8,6 +8,7 @@ import { State } from "redux-saga/reducers";
 import { getPins } from "./actions";
 import "./styles.scss";
 import { useParams } from "react-router-dom";
+import { GET_PINS_CLEAR } from "./reducers";
 
 export interface PinsRequest {
   boardId: number;
@@ -33,7 +34,14 @@ const Board = () => {
   const getPinsResult = useSelector((state: State) => state.getPinsResult);
 
   useEffect(() => {
-    setPins([]);
+    return () => {
+      dispatch({
+        type: GET_PINS_CLEAR
+      });
+    };
+  }, []);
+  
+  useEffect(() => {
     dispatch(
       getPins({
         boardId: boardId as unknown as number,
@@ -54,8 +62,9 @@ const Board = () => {
         parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
       ) {
         setConti(false);
+      } else {
+        setPageNum((pageNum) => pageNum + 1);
       }
-      setPageNum((pageNum) => pageNum + 1);
     }
   }, [getPinsResult]);
 
