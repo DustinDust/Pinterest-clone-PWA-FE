@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Header from "components/Header";
-import logo from "assets/images/logo.png";
 import "./styles.scss";
 import { useViewport } from "hooks";
 import BoardCard from "components/BoardCard";
@@ -18,7 +17,7 @@ export interface Profile {
   updatedAt: string;
 }
 
-export interface BoardsResponse {
+export interface BoardResponse {
   id: number;
   name: string;
   description: string;
@@ -26,6 +25,13 @@ export interface BoardsResponse {
   createdAt: string;
   updateAt: string;
   thumbnail: string | null;
+}
+
+export interface BoardsResponse {
+  data: BoardResponse[];
+  pageIndex: number;
+  pageSize: number;
+  total: number;
 }
 
 export interface BoardsRequest {
@@ -41,7 +47,7 @@ const Profile = () => {
   const profile = getProfileResult?.response as unknown as Profile;
 
   const getBoardsResult = useSelector((state: State) => state.getBoardsResult);
-  const boards = getBoardsResult?.response as unknown as BoardsResponse[];
+  const boards = getBoardsResult?.response as unknown as BoardsResponse;
 
   useEffect(() => {
     dispatch(getProfile());
@@ -91,7 +97,8 @@ const Profile = () => {
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", paddingBottom: "72px" }}>
         {boards &&
-          boards.map((board) => (
+          boards.data &&
+          boards.data.map((board) => (
             <BoardCard
               style={{ width: itemWidth }}
               key={board.id}

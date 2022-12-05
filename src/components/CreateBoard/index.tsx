@@ -6,6 +6,11 @@ import { State } from "redux-saga/reducers";
 import { createBoard, deleteBoard, editingBoard } from "./actions";
 import "./styles.scss";
 import { createToastSuccess } from "./../../screens/Home/actions";
+import {
+  CREATE_BOARD_CLEAR,
+  DELETE_BOARD_CLEAR,
+  EDIT_BOARD_CLEAR
+} from "./reducers";
 
 export interface CreateBoard {
   name: string;
@@ -45,6 +50,31 @@ const CreateBoard = ({ edit, editBoard }: CreateBoardProps) => {
   const deleteBoardResult = useSelector(
     (state: State) => state.deleteBoardResult
   );
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: CREATE_BOARD_CLEAR
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: EDIT_BOARD_CLEAR
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: DELETE_BOARD_CLEAR
+      });
+    };
+  }, []);
+
   useEffect(() => {
     if (createBoardResult) {
       if (createBoardResult.success) {

@@ -9,11 +9,10 @@ function updateBoard(payload: Record<string, unknown>) {
   const { boardId } = payload;
   const formData = new FormData();
   formData.append("image", payload.image as File);
-  formData.append("name", "LTNam");
-  console.log(formData)
+  formData.append("name", payload.name as string || "image");
   return axios.put(`${updateBoardUrl(boardId as number)}`, formData, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "multipart/form-data"
     }
   });
 }

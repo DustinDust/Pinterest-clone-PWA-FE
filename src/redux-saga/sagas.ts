@@ -7,7 +7,7 @@ import {
   getBoards,
   updateBoard
 } from "./sagas/Board";
-import { getPins } from "./sagas/Pin";
+import { deletePin, getPin, getPins } from "./sagas/Pin";
 import { getProfile } from "./sagas/Profile";
 
 export default function* rootSaga() {
@@ -19,6 +19,8 @@ export default function* rootSaga() {
     deleteBoard(),
     getBoards(),
     getPins(),
+    getPin(),
+    deletePin(),
     updateBoard(),
     getProfile()
   ]);

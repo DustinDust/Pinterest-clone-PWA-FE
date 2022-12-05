@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "./actions";
 import { State } from "redux-saga/reducers";
-import { registerResult } from "screens/Register/reducers";
 
 const schema = yup.object().shape({
   username: yup.string().required(),
@@ -137,7 +136,6 @@ const Register = () => {
         <a
           className="link"
           href="https://policy.pinterest.com/vi/terms-of-service"
-          target="_blank"
         >
           Điều khoản dịch vụ
         </a>{" "}
@@ -146,7 +144,6 @@ const Register = () => {
           <a
             className="link"
             href="/https://policy.pinterest.com/vi/privacy-policy"
-            target="_blank"
           >
             Chính sách Quyền riêng tư
           </a>{" "}

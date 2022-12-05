@@ -30,10 +30,12 @@ const Header = (props: HeaderProps) => {
           />
         </div>
         <Share className="icon" />
-        <Edit
-          className="icon"
-          onClick={() => navigate(`/board/${boardId}/edit`)}
-        />
+        {!props.inPin && (
+          <Edit
+            className="icon"
+            onClick={() => navigate(`/board/${boardId}/edit`)}
+          />
+        )}
         {props.inPin && <div className="save">Lưu</div>}
       </div>
     );

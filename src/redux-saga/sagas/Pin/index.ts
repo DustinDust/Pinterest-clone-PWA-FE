@@ -1,3 +1,5 @@
 import getPins from "./getPins";
+import getPin from "./getPin";
+import deletePin from "./DeletePin";
 
-export { getPins };
+export { getPins, getPin, deletePin };

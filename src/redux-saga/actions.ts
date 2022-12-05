@@ -12,3 +12,4 @@ export const UPDATE_BOARD = "UPDATE_BOARD";
 
 export const GET_PINS = "GET_PINS";
 export const GET_PIN = "GET_PIN";
+export const DELETE_PIN = "DELETE_PIN";

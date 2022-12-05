@@ -10,25 +10,39 @@ import "./styles.scss";
 import { useParams } from "react-router-dom";
 import { GET_PINS_CLEAR } from "./reducers";
 
-export interface PinsRequest {
+export interface BoardRequest {
   boardId: number;
   pageNum: number;
   pageSize: number;
 }
 
-export interface PinsResult {
+export interface PinResult {
   id: number;
   url: string;
-  src: string;
   filename: string;
   name: string;
   createdAt: string;
 }
 
+interface BoardData {
+  id: number;
+  name: string;
+  visibility: number;
+  description: string;
+  pins: PinResult[];
+}
+
+interface BoardResponse {
+  data: BoardData;
+  pageIndex: number;
+  pageSize: number;
+  total: number;
+}
+
 const Board = () => {
   const dispatch = useDispatch();
   const { boardId } = useParams();
-  const [pins, setPins] = useState<PinsResult[]>([]);
+  const [pins, setPins] = useState<PinResult[]>([]);
   const [pageNum, setPageNum] = useState(1);
   const [conti, setConti] = useState(true);
   const getPinsResult = useSelector((state: State) => state.getPinsResult);
@@ -40,14 +54,14 @@ const Board = () => {
       });
     };
   }, []);
-  
+
   useEffect(() => {
     dispatch(
       getPins({
         boardId: boardId as unknown as number,
         pageNum: 1,
         pageSize: parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
-      } as PinsRequest)
+      } as BoardRequest)
     );
   }, []);
 
@@ -55,10 +69,10 @@ const Board = () => {
     if (getPinsResult) {
       setPins([
         ...pins,
-        ...(getPinsResult?.response as unknown as PinsResult[])
+        ...(getPinsResult?.response as unknown as BoardResponse).data.pins
       ]);
       if (
-        (getPinsResult?.response as unknown as PinsResult[]).length <
+        (getPinsResult?.response as unknown as BoardResponse).data.pins.length <
         parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
       ) {
         setConti(false);
@@ -75,7 +89,7 @@ const Board = () => {
           boardId: boardId as unknown as number,
           pageNum: pageNum,
           pageSize: parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
-        } as PinsRequest)
+        } as BoardRequest)
       );
     }
   };
@@ -95,7 +109,10 @@ const Board = () => {
   return (
     <div className="board">
       <Header inBoard />
-      <div className="board-name">Gấu Bắc Cực</div>
+      <div className="board-name">
+        {getPinsResult &&
+          (getPinsResult?.response as unknown as BoardResponse).data.name}
+      </div>
       {pins && (
         <Masonry
           style={{ paddingBottom: "72px" }}

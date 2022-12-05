@@ -3,11 +3,11 @@ import axios from "../BaseApi";
 import { Request } from "interfaces";
 import { GET_PIN } from "./../../actions";
 
-const getPinUrl = (id: number) => `/board/${id}/pin`;
+const getPinUrl = (id: number) => `/pin/${id}`;
 
 function getPin(payload: Record<string, unknown>) {
-  const { boardId, pageNum, pageSize } = payload;
-  return axios.get(getPinUrl(boardId as number), {
+  const { pinId, pageNum, pageSize } = payload;
+  return axios.get(getPinUrl(pinId as number), {
     params: {
       pageNum,
       pageSize

@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
-import { BoardsResponse } from "components/Profile";
+import { BoardResponse } from "components/Profile";
 import "./styles.scss";
 
 const BoardCard = ({
@@ -8,7 +8,7 @@ const BoardCard = ({
   props
 }: {
   style: CSSProperties;
-  props: BoardsResponse;
+  props: BoardResponse;
 }) => {
   const navigate = useNavigate();
   return (

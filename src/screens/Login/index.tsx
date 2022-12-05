@@ -114,7 +114,6 @@ const Login = () => {
         <a
           className="link"
           href="https://policy.pinterest.com/vi/terms-of-service"
-          target="_blank"
         >
           Điều khoản dịch vụ
         </a>{" "}
@@ -123,7 +122,6 @@ const Login = () => {
           <a
             className="link"
             href="/https://policy.pinterest.com/vi/privacy-policy"
-            target="_blank"
           >
             Chính sách Quyền riêng tư
           </a>{" "}

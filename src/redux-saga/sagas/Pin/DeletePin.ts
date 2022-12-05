@@ -1,17 +1,18 @@
 import { put, takeLatest, call } from "redux-saga/effects";
 import axios from "../BaseApi";
 import { Request } from "interfaces";
-import { GET_PROFILE } from "./../../actions";
+import { DELETE_PIN } from "./../../actions";
 
-const getProfileUrl = `/user/2`;
+const deletePinUrl = (id: number) => `/board/${id}/remove-pin`;
 
-function getProfile(payload: Record<string, unknown>) {
-  return axios.get(`${getProfileUrl}`);
+function deletePin(payload: Record<string, unknown>) {
+  const { boardId, pinId } = payload;
+  return axios.put(deletePinUrl(boardId as number), [{ id: pinId }]);
 }
 
-function* doGetProfile(request: Request<Record<string, unknown>>): any {
+function* doGetPin(request: Request<Record<string, unknown>>): any {
   try {
-    const response = yield call(getProfile, request.payload!);
+    const response = yield call(deletePin, request.payload!);
     yield put({
       type: request.response?.success?.type,
       payload: {
@@ -33,6 +34,6 @@ function* doGetProfile(request: Request<Record<string, unknown>>): any {
   }
 }
 
-export default function* watchGetProfile() {
-  yield takeLatest(GET_PROFILE, doGetProfile);
+export default function* watchGetPin() {
+  yield takeLatest(DELETE_PIN, doGetPin);
 }

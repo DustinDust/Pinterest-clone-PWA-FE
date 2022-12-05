@@ -7,7 +7,12 @@ const getBoardsUrl = `/board/user`;
 
 function getBoards(payload: Record<string, unknown>) {
   const { userId } = payload;
-  return axios.get(`${getBoardsUrl}/${userId}`);
+  return axios.get(`${getBoardsUrl}/${userId}`, {
+    params: {
+      pageNum: 1,
+      pageSize: 30
+    }
+  });
 }
 
 function* doGetBoards(request: Request<Record<string, unknown>>): any {
