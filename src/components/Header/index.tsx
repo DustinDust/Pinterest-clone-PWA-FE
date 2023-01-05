@@ -1,4 +1,4 @@
-import React, { createRef, RefObject } from "react";
+import React, { createRef, RefObject, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReactComponent as Add } from "assets/svg/add.svg";
 import { ReactComponent as Setting } from "assets/svg/setting.svg";
@@ -19,6 +19,13 @@ const Header = (props: HeaderProps) => {
   const navigate = useNavigate();
   const { boardId } = useParams();
   const ref: RefObject<HTMLInputElement> = createRef();
+  const [selectedImg, setSelectedImg] = useState<File | undefined>(undefined);
+
+  useEffect(() => {
+    if (selectedImg)
+      navigate(`/board/${boardId}/update`, { state: { img: selectedImg } });
+  }, [selectedImg]);
+
   if (props.inBoard || props.inPin) {
     return (
       <div className="headerCom">
@@ -31,10 +38,29 @@ const Header = (props: HeaderProps) => {
         </div>
         <Share className="icon" />
         {!props.inPin && (
-          <Edit
-            className="icon"
-            onClick={() => navigate(`/board/${boardId}/edit`)}
-          />
+          <>
+            <div style={{position: "relative"}}>
+              <Add
+                className="icon"
+                // onClick={() => {
+                //   props.setIsOpen && props.setIsOpen(true);
+                // }}
+              />
+              <input
+                id="upload-pin"
+                type="file"
+                accept="image/*"
+                className="img-picker"
+                onChange={(e) => {
+                  if (e.target.files) setSelectedImg(e.target.files[0]);
+                }}
+              ></input>
+            </div>
+            <Edit
+              className="icon"
+              onClick={() => navigate(`/board/${boardId}/edit`)}
+            />
+          </>
         )}
         {props.inPin && <div className="save">Lưu</div>}
       </div>

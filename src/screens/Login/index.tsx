@@ -5,8 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Header from "components/LogoHeader/index";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./actions";
-import "./styles.scss";
 import { State } from "redux-saga/reducers";
+import { LOGIN_CLEAR } from "./reducers";
+import "./styles.scss";
 
 const schema = yup.object().shape({
   username: yup.string().required(),
@@ -25,16 +26,13 @@ const Login = () => {
   const loginResult = useSelector((state: State) => state.loginResult);
 
   useEffect(() => {
-    if (
-      localStorage.getItem("accessToken") &&
-      localStorage.getItem("refreshToken")
-    ) {
+    if (localStorage.getItem("refreshToken")) {
       navigate("/");
     }
-  }, []);
+  });
 
   useEffect(() => {
-    if (loginResult && loginResult.response?.accessToken) {
+    if (loginResult && loginResult.success) {
       localStorage.setItem(
         "accessToken",
         loginResult.response?.accessToken as string
@@ -43,12 +41,23 @@ const Login = () => {
         "refreshToken",
         loginResult.response?.refreshToken as string
       );
-      navigate("/");
+      localStorage.setItem(
+        "id",
+        loginResult.response?.id as string
+      );
+      window.location.reload();
+      return () => {
+        dispatch({
+          type: LOGIN_CLEAR
+        });
+      };
     }
   }, [loginResult]);
+
   const handleSubmit = (values: LoginForm) => {
     dispatch(login(values));
   };
+
   return (
     <div className="login">
       <Header />
@@ -89,6 +98,9 @@ const Login = () => {
             />
             {errors.password && (
               <div className="feedback">Hãy điền mật khẩu của bạn</div>
+            )}
+            {loginResult && !loginResult.success && (
+              <div className="feedback">Tài khoản hoặc Mật khẩu không đúng</div>
             )}
             <div className="forgot-password">Quên mật khẩu?</div>
             <button

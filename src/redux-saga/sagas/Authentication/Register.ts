@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../BaseApi";
 import { put, takeLatest, call } from "redux-saga/effects";
 import { Request } from "interfaces";
 import { AUTH_REGISTER } from "./../../actions";

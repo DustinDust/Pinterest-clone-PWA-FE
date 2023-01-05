@@ -45,6 +45,7 @@ function Router() {
           <Route path="profile/:boardId" element={<Board />} />
           <Route path="board/create" element={<CreateBoard />} />
           <Route path="board/update" element={<UpdateBoard />} />
+          <Route path="board/:boardId/update" element={<UpdateBoard />} />
           <Route path="board/:boardId/edit" element={<CreateBoard edit />} />
           <Route path="pin/:pinId" element={<Pin />} />
         </Route>

@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import Router from "./router";
 import { Provider } from "react-redux";
 import { store } from "./screens/Home/store";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import "./index.scss";
 
 const root = ReactDOM.createRoot(
@@ -13,3 +14,5 @@ root.render(
     <Router />
   </Provider>
 );
+
+serviceWorkerRegistration.register();
