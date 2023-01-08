@@ -8,8 +8,20 @@ const updateBoardUrl = (boardId: number) => `/board/${boardId}/save-pin`;
 function updateBoard(payload: Record<string, unknown>) {
   const { boardId } = payload;
   const formData = new FormData();
-  formData.append("image", payload.image as File);
-  formData.append("name", payload.name as string || "image");
+  if (payload.pinId) {
+    formData.append("id", payload.pinId as string);
+  } else {
+    formData.append("image", payload.image as File);
+    formData.append("name", (payload.name as string) || "image");
+    if (payload.tags) {
+      for (let i = 0; i < (payload.tags as Array<any>).length; i++) {
+        formData.append(
+          `idTags[${i}]`,
+          (payload.tags as Array<any>)[i].id as string
+        );
+      }
+    }
+  }
   return axios.put(`${updateBoardUrl(boardId as number)}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data"

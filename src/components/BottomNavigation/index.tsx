@@ -14,18 +14,18 @@ export enum Tabs {
 }
 
 const tabs = [
-  {
-    component: Home,
-    path: Tabs.Home
-  },
+  // {
+  //   component: Home,
+  //   path: Tabs.Home
+  // },
   {
     component: Search,
     path: Tabs.Search
   },
-  {
-    component: Comment,
-    path: Tabs.Noti
-  },
+  // {
+  //   component: Comment,
+  //   path: Tabs.Noti
+  // },
   {
     component: Profile,
     path: Tabs.Profile

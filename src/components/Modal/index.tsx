@@ -1,17 +1,18 @@
 import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { saveAs } from "file-saver";
 import { ReactComponent as Close } from "assets/svg/close.svg";
 import { ReactComponent as Pin } from "assets/svg/pin.svg";
 import { ReactComponent as Share } from "assets/svg/share2.svg";
-import { ReactComponent as Save } from "assets/svg/save.svg";
-import { ReactComponent as Add } from "assets/svg/add.svg";
 import { ReactComponent as Delete } from "assets/svg/delete.svg";
 import { deletePin } from "components/Pin/actions";
 import { State } from "redux-saga/reducers";
-import { createToastSuccess } from "screens/Home/actions";
+import { BoardsRequest, BoardsResponse } from "components/Profile";
 import { DELETE_PIN_CLEAR } from "components/Pin/reducers";
+import { UPDATE_BOARD_CLEAR } from "components/UpdateBoard/reducers";
+import { createToastSuccess } from "screens/Home/actions";
+import { updateBoard } from "components/UpdateBoard/actions";
+import { getBoardsProfile } from "components/Profile/actions";
 import "./styles.scss";
 
 interface ModalProps {
@@ -19,20 +20,37 @@ interface ModalProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   pinId?: number;
   src?: string;
+  setting?: boolean;
 }
 
-const Modal = ({ inProfile, setIsOpen, pinId, src }: ModalProps) => {
+const Modal = ({ inProfile, setIsOpen, pinId, src, setting }: ModalProps) => {
   const { boardId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [save, setSave] = useState(false);
   const [selectedImg, setSelectedImg] = useState<File | undefined>(undefined);
 
+  const updateBoardResult = useSelector(
+    (state: State) => state.updateBoardResult
+  );
   const deletePinResult = useSelector((state: State) => state.deletePinResult);
+
+  const getBoardsProfileResult = useSelector(
+    (state: State) => state.getBoardsProfileResult
+  );
+  const boards = getBoardsProfileResult?.response as unknown as BoardsResponse;
 
   useEffect(() => {
     if (selectedImg) navigate("/board/update", { state: { img: selectedImg } });
   }, [selectedImg]);
+
+  useEffect(() => {
+    dispatch(
+      getBoardsProfile({
+        userId: localStorage.getItem("id")
+      } as unknown as BoardsRequest)
+    );
+  }, []);
 
   useEffect(() => {
     if (deletePinResult) {
@@ -50,9 +68,32 @@ const Modal = ({ inProfile, setIsOpen, pinId, src }: ModalProps) => {
     }
   }, [deletePinResult]);
 
-  // const downloadImage = () => {
-  //   saveAs("https://httpbin.org/image", "image.jpg"); // Put your image url here.
-  // };
+  useEffect(() => {
+    if (updateBoardResult) {
+      if (updateBoardResult.success) {
+        dispatch(createToastSuccess({ title: "Upload image succeed!" }));
+      } else if (updateBoardResult.error) {
+        dispatch(createToastSuccess({ title: "Upload image failed!" }));
+      }
+      navigate(-1);
+    }
+    return () => {
+      dispatch({
+        type: UPDATE_BOARD_CLEAR
+      });
+    };
+  }, [updateBoardResult]);
+
+  const handleUpdate = (id: number) => {
+    dispatch(updateBoard({ boardId: id, pinId: pinId }));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("id");
+    navigate("/login");
+  };
 
   return (
     <>
@@ -61,59 +102,73 @@ const Modal = ({ inProfile, setIsOpen, pinId, src }: ModalProps) => {
         <div className="modal-header">
           <Close className="header-button" onClick={() => setIsOpen(false)} />
           <div className="header-text">
-            {inProfile ? "Thêm vào hồ sơ" : save ? "Lưu vào bảng" : "Tuỳ chọn"}
+            {inProfile
+              ? setting
+                ? "Cài đặt"
+                : "Thêm vào hồ sơ"
+              : save
+              ? "Lưu vào bảng"
+              : "Tuỳ chọn"}
           </div>
         </div>
         <div className="modal-buttons">
           {inProfile ? (
-            <>
-              <div className="img-picker-text">
-                Ảnh
-                <input
-                  id="upload-pin"
-                  type="file"
-                  accept="image/*"
-                  className="img-picker"
-                  onChange={(e) => {
-                    if (e.target.files) setSelectedImg(e.target.files[0]);
-                  }}
-                ></input>
-              </div>
-              <div onClick={() => navigate("/board/create")}>Bảng</div>
-            </>
+            setting ? (
+              <>
+                <div
+                  className="img-picker-text"
+                  onClick={() => navigate("/settings/profile")}
+                >
+                  Chỉnh sửa hồ sơ
+                </div>
+                <div onClick={handleLogout}>Đăng xuất</div>
+              </>
+            ) : (
+              <>
+                <div className="img-picker-text">
+                  Ảnh
+                  <input
+                    id="upload-pin"
+                    type="file"
+                    accept="image/*"
+                    className="img-picker"
+                    onChange={(e) => {
+                      if (e.target.files) setSelectedImg(e.target.files[0]);
+                    }}
+                  ></input>
+                </div>
+                <div onClick={() => navigate("/board/create")}>Bảng</div>
+              </>
+            )
           ) : save ? (
             <>
-              <div className="modal-board">
-                <img
-                  src="https://i.pinimg.com/236x/6a/71/ef/6a71efd53f8304a47e555404f6758054.jpg"
-                  className="modal-img"
-                  alt=""
-                />
-                Gấu bắc cực
-              </div>
-              <div className="modal-board">
-                <img
-                  src="https://i.pinimg.com/236x/6a/71/ef/6a71efd53f8304a47e555404f6758054.jpg"
-                  className="modal-img"
-                  alt=""
-                />
-                Gấu bắc cực
-              </div>
-              <div className="modal-board">
-                <img
-                  src="https://i.pinimg.com/236x/6a/71/ef/6a71efd53f8304a47e555404f6758054.jpg"
-                  className="modal-img"
-                  alt=""
-                />
-                Gấu bắc cực
-              </div>
-              <div
+              {boards &&
+                boards.data.map((board) => {
+                  return (
+                    <div
+                      className="modal-board"
+                      key={board.id}
+                      onClick={() => handleUpdate(board.id)}
+                    >
+                      <img
+                        src={
+                          board.thumbnail ||
+                          "https://i.pinimg.com/236x/6a/71/ef/6a71efd53f8304a47e555404f6758054.jpg"
+                        }
+                        className="modal-img"
+                        alt={board.name}
+                      />
+                      {board.name}
+                    </div>
+                  );
+                })}
+              {/* <div
                 className="create-board"
                 onClick={() => navigate("/board/create")}
               >
                 <Add className="create-icon" />
                 Tạo bảng
-              </div>
+              </div> */}
             </>
           ) : (
             <>

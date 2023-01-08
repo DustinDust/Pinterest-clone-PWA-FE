@@ -6,24 +6,42 @@ import {
   DeleteBoardResult,
   EditBoardResult
 } from "components/CreateBoard/reducers";
-import { GetBoardsResult, GetProfileResult } from "components/Profile/reducers";
+import {
+  GetBoardsProfileResult,
+  GetBoardsResult,
+  GetProfileResult
+} from "components/Profile/reducers";
 import { GetPinsResult } from "components/Board/reducers";
-import { UpdateBoardResult } from "components/UpdateBoard/reducers";
+import {
+  GetTagsResult,
+  UpdateBoardResult
+} from "components/UpdateBoard/reducers";
 import { ToastResult } from "screens/Home/reducers";
-import { DeletePinResult, GetPinResult } from "components/Pin/reducers";
+import {
+  DeletePinResult,
+  GetBoardsHasPinResult,
+  GetPinResult
+} from "components/Pin/reducers";
+import { UpdateProfileResult } from "components/UpdateProfile/reducers";
+import { SearchByTagResult } from "components/Search/reducers";
 
 const rootReducer = combineReducers({
   loginResult: LoginResult,
   registerResult: registerResult,
   getProfileResult: GetProfileResult,
+  updateProfileResult: UpdateProfileResult,
   createBoardResult: CreateBoardResult,
   editBoardResult: EditBoardResult,
   deleteBoardResult: DeleteBoardResult,
   getBoardsResult: GetBoardsResult,
+  getBoardsProfileResult: GetBoardsProfileResult,
   updateBoardResult: UpdateBoardResult,
   getPinsResult: GetPinsResult,
   getPinResult: GetPinResult,
   deletePinResult: DeletePinResult,
+  getBoardsHasPinResult: GetBoardsHasPinResult,
+  getTagsResult: GetTagsResult,
+  searchByTagResult: SearchByTagResult,
   toastResult: ToastResult
 });
 

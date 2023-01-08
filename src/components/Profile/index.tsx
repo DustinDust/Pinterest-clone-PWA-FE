@@ -7,8 +7,9 @@ import Modal from "components/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "redux-saga/reducers";
 import { getBoards, getProfile } from "./actions";
+import { useParams } from "react-router-dom";
 
-export interface Profile {
+export interface ProfileInterface {
   id: number;
   username: string;
   displayName: string;
@@ -39,26 +40,28 @@ export interface BoardsRequest {
 }
 
 const Profile = () => {
+  const { userId } = useParams();
   const dispatch = useDispatch();
 
   const getProfileResult = useSelector(
     (state: State) => state.getProfileResult
   );
-  const profile = getProfileResult?.response as unknown as Profile;
+  const profile = getProfileResult?.response as unknown as ProfileInterface;
 
   const getBoardsResult = useSelector((state: State) => state.getBoardsResult);
   const boards = getBoardsResult?.response as unknown as BoardsResponse;
 
   useEffect(() => {
-    dispatch(getProfile());
+    dispatch(getProfile({userId}));
   }, []);
 
   useEffect(() => {
     if (profile) dispatch(getBoards({ userId: profile.id } as BoardsRequest));
   }, [profile]);
 
-  const [active, setActive] = useState(1);
+  // const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
+  const [openSetting, setOpenSetting] = useState(false);
 
   const viewPort = useViewport();
   const itemWidth =
@@ -66,8 +69,9 @@ const Profile = () => {
 
   return (
     <div className="profile">
-      <Header setIsOpen={setOpen} />
+      <Header setIsOpen={setOpen} setOpenSetting={setOpenSetting}/>
       {open && <Modal setIsOpen={setOpen} inProfile />}
+      {openSetting && <Modal setIsOpen={setOpenSetting} inProfile setting/>}
       {profile && (
         <>
           <img
@@ -77,11 +81,10 @@ const Profile = () => {
           ></img>
           <div className="user-name">{profile.displayName}</div>
           <div className="email">{profile.username}</div>
-          <div className="rela">0 người theo dõi · 0 người đang theo dõi</div>
         </>
       )}
-      <div className="share">Chia sẻ</div>
-      <div className="boards">
+      {/* <div className="share">Chia sẻ</div> */}
+      {/* <div className="boards">
         <div
           className={`board ${active === 0 ? "active" : ""}`}
           onClick={() => setActive(0)}
@@ -94,7 +97,7 @@ const Profile = () => {
         >
           Đã lưu
         </div>
-      </div>
+      </div> */}
       <div style={{ display: "flex", flexWrap: "wrap", paddingBottom: "72px" }}>
         {boards &&
           boards.data &&

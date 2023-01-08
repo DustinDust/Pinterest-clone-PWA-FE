@@ -4,11 +4,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as Back } from "assets/svg/back.svg";
 import { ReactComponent as Add } from "assets/svg/add.svg";
 import { BoardsResponse } from "components/Profile";
+import { Select } from "antd";
 import { State } from "redux-saga/reducers";
-import { updateBoard } from "./actions";
+import { UPDATE_BOARD_CLEAR } from "./reducers";
+import { getTags, updateBoard } from "./actions";
 import { createToastSuccess } from "screens/Home/actions";
 import "./styles.scss";
-import { UPDATE_BOARD_CLEAR } from "./reducers";
+
+interface Tag {
+  id: number;
+  name: string;
+}
 
 const UpdateBoard = () => {
   const location = useLocation();
@@ -23,13 +29,21 @@ const UpdateBoard = () => {
   const getBoardsResult = useSelector((state: State) => state.getBoardsResult);
   const boards = getBoardsResult?.response as unknown as BoardsResponse;
 
+  const getTagsResult = useSelector((state: State) => state.getTagsResult);
+  const tags = getTagsResult?.response as unknown as Tag[];
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
+  // const [tags, setTags] = useState([]);
 
   const handleUpdate = (id: number) => {
     dispatch(
-      updateBoard({ boardId: id, image: location.state.img, name: name })
+      updateBoard({
+        boardId: id,
+        image: location.state.img,
+        name: name,
+        tags: tags
+      })
     );
   };
 
@@ -49,6 +63,16 @@ const UpdateBoard = () => {
     };
   }, [updateBoardResult]);
 
+  useEffect(() => {
+    dispatch(getTags());
+  }, []);
+
+  // useEffect(() => {
+  //   if (getTagsResult && getTagsResult?.response) {
+  //     setTags(getTagsResult.response);
+  //   }
+  // }, [getTagsResult]);
+
   return (
     <div>
       <div className="update-header">
@@ -61,6 +85,19 @@ const UpdateBoard = () => {
         className="update-input"
         value={name}
         onChange={(value) => setName(value.target.value)}
+      />
+      <Select
+        mode="multiple"
+        allowClear
+        style={{ width: "100%", marginTop: "16px" }}
+        placeholder="Gắn tag cho thẻ"
+        options={(tags || []).map((d) => ({
+          value: d.id,
+          label: d.name
+        }))}
+        filterOption={(input, option) =>
+          (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+        }
       />
       <div className={`update-content ${boardId && "save-btn-wr"}`}>
         {!boardId &&

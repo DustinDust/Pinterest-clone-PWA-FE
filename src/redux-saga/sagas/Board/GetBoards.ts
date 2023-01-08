@@ -2,6 +2,7 @@ import { put, takeLatest, call } from "redux-saga/effects";
 import axios from "../BaseApi";
 import { Request } from "interfaces";
 import { GET_BOARDS } from "./../../actions";
+import { GET_BOARDS_PROFILE } from "./../../actions";
 
 const getBoardsUrl = `/board/user`;
 
@@ -39,6 +40,10 @@ function* doGetBoards(request: Request<Record<string, unknown>>): any {
   }
 }
 
-export default function* watchGetBoards() {
+export function* watchGetBoards() {
   yield takeLatest(GET_BOARDS, doGetBoards);
+}
+
+export function* watchGetBoardsProfile() {
+  yield takeLatest(GET_BOARDS_PROFILE, doGetBoards);
 }

@@ -16,6 +16,7 @@ import Board from "components/Board";
 import CreateBoard from "./../components/CreateBoard/index";
 import UpdateBoard from "./../components/UpdateBoard/index";
 import Pin from "components/Pin";
+import UpdateProfile from "components/UpdateProfile";
 
 const ProtectedRoute = ({ user, redirectPath = "/login", children }: any) => {
   if (!user) {
@@ -40,9 +41,12 @@ function Router() {
         >
           <Route path="" element={<Feed />} />
           <Route path="search" element={<Search />} />
-          <Route path="notification" element={<Search />} />
+          {/* <Route path="notification" element={<Search />} /> */}
           <Route path="profile" element={<Profile />} />
+          <Route path="settings/profile" element={<UpdateProfile />} />
+          <Route path=":userId" element={<Profile />} />
           <Route path="profile/:boardId" element={<Board />} />
+          <Route path=":userId/:boardId" element={<Board />} />
           <Route path="board/create" element={<CreateBoard />} />
           <Route path="board/update" element={<UpdateBoard />} />
           <Route path="board/:boardId/update" element={<UpdateBoard />} />

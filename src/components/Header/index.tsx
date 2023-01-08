@@ -5,14 +5,19 @@ import { ReactComponent as Setting } from "assets/svg/setting.svg";
 import { ReactComponent as Search } from "assets/svg/search.svg";
 import { ReactComponent as Back } from "assets/svg/back.svg";
 import { ReactComponent as Edit } from "assets/svg/edit.svg";
-import { ReactComponent as Share } from "assets/svg/share.svg";
 import "./styles.scss";
 
 interface HeaderProps {
   inSearch?: boolean;
   inBoard?: boolean;
   inPin?: boolean;
+  inSetting?: boolean;
+  text?: string;
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenSetting?: React.Dispatch<React.SetStateAction<boolean>>;
+  setText?: React.Dispatch<React.SetStateAction<string>>;
+  handleUpdate?: () => void;
+  handleSearch?: () => void;
 }
 
 const Header = (props: HeaderProps) => {
@@ -26,20 +31,21 @@ const Header = (props: HeaderProps) => {
       navigate(`/board/${boardId}/update`, { state: { img: selectedImg } });
   }, [selectedImg]);
 
-  if (props.inBoard || props.inPin) {
+  if (props.inBoard || props.inPin || props.inSetting) {
     return (
       <div className="headerCom">
-        <div className="back">
+        <div className={props.inSetting ? `back1` : `back`}>
           <Back
             onClick={() => {
               navigate(-1);
             }}
           />
         </div>
-        <Share className="icon" />
-        {!props.inPin && (
+        {/* <Share className="icon" /> */}
+        {props.inSetting && <div className="title">Chỉnh sửa hồ sơ</div>}
+        {!props.inPin && !props.inSetting && (
           <>
-            <div style={{position: "relative"}}>
+            <div style={{ position: "relative" }}>
               <Add
                 className="icon"
                 // onClick={() => {
@@ -51,6 +57,7 @@ const Header = (props: HeaderProps) => {
                 type="file"
                 accept="image/*"
                 className="img-picker"
+                value={props.text}
                 onChange={(e) => {
                   if (e.target.files) setSelectedImg(e.target.files[0]);
                 }}
@@ -63,6 +70,11 @@ const Header = (props: HeaderProps) => {
           </>
         )}
         {props.inPin && <div className="save">Lưu</div>}
+        {props.inSetting && (
+          <div className="save" onClick={props?.handleUpdate}>
+            Xong
+          </div>
+        )}
       </div>
     );
   }
@@ -78,7 +90,22 @@ const Header = (props: HeaderProps) => {
         }}
       >
         <Search />
-        <input type="text" className="text" placeholder="Tìm kiếm" ref={ref} />
+        <input
+          type="text"
+          className="text"
+          placeholder="Tìm kiếm"
+          ref={ref}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              props.handleSearch && props.handleSearch();
+            }
+          }}
+          onChange={(e) => {
+            if (props.setText) {
+              props.setText(e.target.value);
+            }
+          }}
+        />
       </div>
       {!props.inSearch && (
         <>
@@ -88,7 +115,12 @@ const Header = (props: HeaderProps) => {
               props.setIsOpen && props.setIsOpen(true);
             }}
           />
-          <Setting className="icon" />
+          <Setting
+            className="icon"
+            onClick={() => {
+              props.setOpenSetting && props.setOpenSetting(true);
+            }}
+          />
         </>
       )}
     </div>

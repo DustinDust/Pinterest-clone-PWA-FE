@@ -9,7 +9,7 @@ import { State } from "redux-saga/reducers";
 
 const Home = () => {
   const toastResult = useSelector((state: State) => state.toastResult);
-  console.log(toastResult);
+  
   useEffect(() => {
     if (toastResult) {
       toast((toastResult as unknown as Record<string, string>).title, {

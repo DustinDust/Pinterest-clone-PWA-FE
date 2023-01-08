@@ -1,20 +1,24 @@
 import { put, takeLatest, call } from "redux-saga/effects";
 import axios from "../BaseApi";
 import { Request } from "interfaces";
-import { GET_PROFILE } from "./../../actions";
+import { SEARCH_BY_TAG } from "./../../actions";
 
-const getProfileUrl = (userId: number) => {
-  return userId ? `/user/${userId}` : `/user/${localStorage.getItem("id")}`;
-};
+const searchByTagUrl = `/search`;
 
-function getProfile(payload: Record<string, unknown>) {
-  const { userId } = payload;
-  return axios.get(`${getProfileUrl(userId as number)}`);
+function searchByTag(payload: Record<string, unknown>) {
+  const { text, pageNum, pageSize } = payload;
+  return axios.get(searchByTagUrl, {
+    params: {
+      pageNum: pageNum,
+      pageSize: pageSize,
+      name: text
+    }
+  });
 }
 
-function* doGetProfile(request: Request<Record<string, unknown>>): any {
+function* doSearchByTag(request: Request<Record<string, unknown>>): any {
   try {
-    const response = yield call(getProfile, request.payload!);
+    const response = yield call(searchByTag, request.payload!);
     yield put({
       type: request.response?.success?.type,
       payload: {
@@ -36,6 +40,6 @@ function* doGetProfile(request: Request<Record<string, unknown>>): any {
   }
 }
 
-export default function* watchGetProfile() {
-  yield takeLatest(GET_PROFILE, doGetProfile);
+export default function* watchSearchByTag() {
+  yield takeLatest(SEARCH_BY_TAG, doSearchByTag);
 }

@@ -1,20 +1,23 @@
 import { put, takeLatest, call } from "redux-saga/effects";
 import axios from "../BaseApi";
 import { Request } from "interfaces";
-import { GET_PROFILE } from "./../../actions";
+import { GET_BOARDS_HAS_PIN } from "./../../actions";
 
-const getProfileUrl = (userId: number) => {
-  return userId ? `/user/${userId}` : `/user/${localStorage.getItem("id")}`;
-};
+const getBoardsHasPinUrl = (id: number) => `/pin/${id}/boards`;
 
-function getProfile(payload: Record<string, unknown>) {
-  const { userId } = payload;
-  return axios.get(`${getProfileUrl(userId as number)}`);
+function getBoardsHasPin(payload: Record<string, unknown>) {
+  const { pinId } = payload;
+  return axios.get(getBoardsHasPinUrl(pinId as number), {
+    params: {
+      pageNum: 1,
+      pageSize: 30
+    }
+  });
 }
 
-function* doGetProfile(request: Request<Record<string, unknown>>): any {
+function* doGetBoardsHasPin(request: Request<Record<string, unknown>>): any {
   try {
-    const response = yield call(getProfile, request.payload!);
+    const response = yield call(getBoardsHasPin, request.payload!);
     yield put({
       type: request.response?.success?.type,
       payload: {
@@ -36,6 +39,6 @@ function* doGetProfile(request: Request<Record<string, unknown>>): any {
   }
 }
 
-export default function* watchGetProfile() {
-  yield takeLatest(GET_PROFILE, doGetProfile);
+export default function* watchGetBoardHasPin() {
+  yield takeLatest(GET_BOARDS_HAS_PIN, doGetBoardsHasPin);
 }

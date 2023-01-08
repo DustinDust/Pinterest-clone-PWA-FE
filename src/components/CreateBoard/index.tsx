@@ -188,15 +188,15 @@ const CreateBoard = ({ edit, editBoard }: CreateBoardProps) => {
         </div>
       </form>
       {edit && (
-        <>
-          <button className="create-button" onClick={handleDelete}>
-            Chỉnh sửa
+        <div className="delete">
+          <button className="delete-button" onClick={handleDelete}>
+            Xoá
           </button>
           <div>
             Xóa bảng này và tất cả các Ghim trên đó mãi mãi. Bạn không thể hoàn
             tác!
           </div>
-        </>
+        </div>
       )}
     </div>
   );

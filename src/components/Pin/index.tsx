@@ -5,12 +5,26 @@ import Header from "components/Header";
 import "./styles.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "redux-saga/reducers";
-import { getPin } from "./actions";
+import { getBoardsHasPin, getPin } from "./actions";
 import { useParams } from "react-router-dom";
 import { PinResult } from "components/Board";
+import BoardCard from "components/BoardCard";
+import { useViewport } from "hooks";
 
 export interface PinRequest {
   pinId: number;
+}
+
+export interface BoardHasPin {
+  id: number;
+  name: string;
+  thumbnail: string;
+  user: {
+    id: number;
+    username: string;
+    displayName: string;
+    avatarUrl: string;
+  };
 }
 
 const Pin = () => {
@@ -20,17 +34,22 @@ const Pin = () => {
   const getPinResult = useSelector((state: State) => state.getPinResult);
   const pin = getPinResult?.response as unknown as PinResult;
 
+  const getBoardsHasPinResult = useSelector(
+    (state: State) => state.getBoardsHasPinResult
+  );
+  const boards = getBoardsHasPinResult?.response
+    ?.data as unknown as BoardHasPin[];
+
   useEffect(() => {
     if (pinId) {
       dispatch(getPin({ pinId: Number(pinId) } as PinRequest));
+      dispatch(getBoardsHasPin({ pinId: Number(pinId) } as PinRequest));
     }
   }, []);
 
-  // const viewPort = useViewport();
-  // const itemWidth =
-  //   viewPort.width <= 600
-  //     ? viewPort.width / 2
-  //     : viewPort.width / Math.floor(viewPort.width / 200);
+  const viewPort = useViewport();
+  const itemWidth =
+    viewPort.width <= 900 ? viewPort.width / 2 : viewPort.width / 3;
 
   return (
     <div className="pin">
@@ -38,30 +57,18 @@ const Pin = () => {
       {pin && <img src={pin.url} alt={pin.name} className="pin-image" />}
       <div className="img-attribute">
         <div className="img-name">{pin && pin.name}</div>
-        {/* <div className="img-des">
-          wsuehrftiuwedshnfbvkjusdhfiusehfgksjdnfbksjef
-        </div> */}
       </div>
-      <div className="user-attributes">
-        <img
-          src="https://i.pinimg.com/736x/36/41/76/36417642b0d5781e17cb52d61334aadb.jpg"
-          alt="123"
-          className="user-img"
-        />
-        <div className="user-attribute">
-          <div className="user-name">LTNam</div>
-          <div className="user-follower">123 Người theo dõi</div>
-        </div>
-        <button className="follow-btn">Theo dõi</button>
+      <div className="img-note" style={{marginBottom: "-48px"}}>Các bảng lưu pin</div>
+      <div style={{ display: "flex" }}>
+        {boards &&
+          boards.map((board, i) => (
+            <BoardCard
+              style={{ width: itemWidth }}
+              key={board.id}
+              boardInPin={board}
+            />
+          ))}
       </div>
-      {/* <div className="other">Các ghi khác tương tự</div> */}
-      {/* <Masonry
-        items={data}
-        columnGutter={8} // Set khoảng cách giữa các column
-        columnWidth={itemWidth - 24} // Set chiều rộng tối thiểu
-        overscanBy={5} // Giá trị để render trước khi scroll tới
-        render={ImageCard} // Grid item của component
-      /> */}
     </div>
   );
 };
