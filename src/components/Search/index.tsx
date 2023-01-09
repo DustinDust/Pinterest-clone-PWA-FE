@@ -21,17 +21,21 @@ const Search = () => {
   );
 
   const handleSearch = () => {
-    dispatch(
-      searchByTag({
-        text: text,
-        pageNum: 1,
-        pageSize: parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
-      })
-    );
+    setPins([]);
+    if (text) {
+      dispatch(
+        searchByTag({
+          text: text,
+          pageNum: pageNum,
+          pageSize: parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
+        })
+      );
+    }
   };
 
   useEffect(() => {
     return () => {
+      setPins([]);
       dispatch({
         type: SEARCH_BY_TAG_CLEAR
       });
@@ -87,17 +91,16 @@ const Search = () => {
         setText={setText}
         handleSearch={handleSearch}
       />
-      {pins && (
-        <Masonry
-          style={{ marginTop: "72px", marginBottom: "72px" }}
-          items={pins}
-          columnGutter={8} // Set khoảng cách giữa các column
-          columnWidth={itemWidth - 24} // Set chiều rộng tối thiểu là 300px
-          overscanBy={5} // Giá trị để render trước khi scroll tới
-          render={ImageCard} // Grid item của component
-          onRender={maybeLoadMore}
-        />
-      )}
+      <Masonry
+        style={{ marginTop: "72px", marginBottom: "72px" }}
+        items={pins}
+        key={text}
+        columnGutter={8} // Set khoảng cách giữa các column
+        columnWidth={itemWidth - 24} // Set chiều rộng tối thiểu là 300px
+        overscanBy={5} // Giá trị để render trước khi scroll tới
+        render={ImageCard} // Grid item của component
+        onRender={maybeLoadMore}
+      />
     </div>
   );
 };

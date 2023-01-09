@@ -14,10 +14,10 @@ export enum Tabs {
 }
 
 const tabs = [
-  // {
-  //   component: Home,
-  //   path: Tabs.Home
-  // },
+  {
+    component: Home,
+    path: Tabs.Home
+  },
   {
     component: Search,
     path: Tabs.Search

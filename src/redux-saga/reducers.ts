@@ -24,6 +24,7 @@ import {
 } from "components/Pin/reducers";
 import { UpdateProfileResult } from "components/UpdateProfile/reducers";
 import { SearchByTagResult } from "components/Search/reducers";
+import { GetAllPinsResult } from "components/Feed/reducers";
 
 const rootReducer = combineReducers({
   loginResult: LoginResult,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   getBoardsProfileResult: GetBoardsProfileResult,
   updateBoardResult: UpdateBoardResult,
   getPinsResult: GetPinsResult,
+  getAllPinsResult: GetAllPinsResult,
   getPinResult: GetPinResult,
   deletePinResult: DeletePinResult,
   getBoardsHasPinResult: GetBoardsHasPinResult,

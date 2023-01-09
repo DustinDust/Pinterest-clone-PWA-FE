@@ -15,6 +15,7 @@ interface HeaderProps {
   text?: string;
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenSetting?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSave?: React.Dispatch<React.SetStateAction<boolean>>;
   setText?: React.Dispatch<React.SetStateAction<string>>;
   handleUpdate?: () => void;
   handleSearch?: () => void;
@@ -69,7 +70,14 @@ const Header = (props: HeaderProps) => {
             />
           </>
         )}
-        {props.inPin && <div className="save">Lưu</div>}
+        {props.inPin && (
+          <div
+            className="save"
+            onClick={() => props.setSave && props.setSave(true)}
+          >
+            Lưu
+          </div>
+        )}
         {props.inSetting && (
           <div className="save" onClick={props?.handleUpdate}>
             Xong
@@ -103,6 +111,7 @@ const Header = (props: HeaderProps) => {
           onChange={(e) => {
             if (props.setText) {
               props.setText(e.target.value);
+              // props.handleSearch && props.handleSearch();
             }
           }}
         />

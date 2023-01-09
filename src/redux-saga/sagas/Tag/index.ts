@@ -1,4 +1,7 @@
 import getTags from "./getTags";
-import searchByTag from "./searchByTag";
+import {
+  watchSearchByTag as searchByTag,
+  watchGetAllPins as getAllPins
+} from "./searchByTag";
 
-export { getTags, searchByTag };
+export { getTags, searchByTag, getAllPins };

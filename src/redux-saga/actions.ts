@@ -17,5 +17,7 @@ export const GET_PIN = "GET_PIN";
 export const GET_BOARDS_HAS_PIN = "GET_BOARDS_HAS_PIN";
 export const DELETE_PIN = "DELETE_PIN";
 
+export const GET_ALL_PINS = "GET_ALL_PINS";
+
 export const GET_TAGS = "GET_TAGS";
 export const SEARCH_BY_TAG = "SEARCH_BY_TAG";

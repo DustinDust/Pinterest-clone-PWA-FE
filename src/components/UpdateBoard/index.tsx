@@ -26,8 +26,8 @@ const UpdateBoard = () => {
     (state: State) => state.updateBoardResult
   );
 
-  const getBoardsResult = useSelector((state: State) => state.getBoardsResult);
-  const boards = getBoardsResult?.response as unknown as BoardsResponse;
+  const getBoardsProfileResult = useSelector((state: State) => state.getBoardsProfileResult);
+  const boards = getBoardsProfileResult?.response as unknown as BoardsResponse;
 
   const getTagsResult = useSelector((state: State) => state.getTagsResult);
   const tags = getTagsResult?.response as unknown as Tag[];

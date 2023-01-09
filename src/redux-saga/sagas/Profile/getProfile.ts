@@ -3,13 +3,12 @@ import axios from "../BaseApi";
 import { Request } from "interfaces";
 import { GET_PROFILE } from "./../../actions";
 
-const getProfileUrl = (userId: number) => {
+const getProfileUrl = (userId?: number) => {
   return userId ? `/user/${userId}` : `/user/${localStorage.getItem("id")}`;
 };
 
-function getProfile(payload: Record<string, unknown>) {
-  const { userId } = payload;
-  return axios.get(`${getProfileUrl(userId as number)}`);
+function getProfile(payload?: Record<string, unknown>) {
+  return axios.get(`${getProfileUrl(payload?.userId as number)}`);
 }
 
 function* doGetProfile(request: Request<Record<string, unknown>>): any {

@@ -1,7 +1,7 @@
 import { put, takeLatest, call } from "redux-saga/effects";
 import axios from "../BaseApi";
 import { Request } from "interfaces";
-import { SEARCH_BY_TAG } from "./../../actions";
+import { GET_ALL_PINS, SEARCH_BY_TAG } from "./../../actions";
 
 const searchByTagUrl = `/search`;
 
@@ -40,6 +40,10 @@ function* doSearchByTag(request: Request<Record<string, unknown>>): any {
   }
 }
 
-export default function* watchSearchByTag() {
+export function* watchSearchByTag() {
   yield takeLatest(SEARCH_BY_TAG, doSearchByTag);
+}
+
+export function* watchGetAllPins() {
+  yield takeLatest(GET_ALL_PINS, doSearchByTag);
 }

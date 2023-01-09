@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { Masonry } from "masonic";
 // import { useViewport } from "hooks";
 import Header from "components/Header";
@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { PinResult } from "components/Board";
 import BoardCard from "components/BoardCard";
 import { useViewport } from "hooks";
+import Modal from "components/Modal";
 
 export interface PinRequest {
   pinId: number;
@@ -28,6 +29,7 @@ export interface BoardHasPin {
 }
 
 const Pin = () => {
+  const [save, setSave] = useState(false);
   const { pinId } = useParams();
   const dispatch = useDispatch();
 
@@ -53,7 +55,8 @@ const Pin = () => {
 
   return (
     <div className="pin">
-      <Header inPin />
+      <Header inPin setSave={setSave}/>
+      {save && <Modal saveOpen pinId={pin.id} src={pin.url} setIsOpen={setSave}/>}
       {pin && <img src={pin.url} alt={pin.name} className="pin-image" />}
       <div className="img-attribute">
         <div className="img-name">{pin && pin.name}</div>

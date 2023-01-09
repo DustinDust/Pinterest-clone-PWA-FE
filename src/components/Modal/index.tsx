@@ -21,9 +21,18 @@ interface ModalProps {
   pinId?: number;
   src?: string;
   setting?: boolean;
+  saveOpen?: boolean;
 }
 
-const Modal = ({ inProfile, setIsOpen, pinId, src, setting }: ModalProps) => {
+const Modal = ({
+  inProfile,
+  setIsOpen,
+  pinId,
+  src,
+  setting,
+  saveOpen
+}: ModalProps) => {
+  const auth = localStorage.getItem("id");
   const { boardId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -106,7 +115,7 @@ const Modal = ({ inProfile, setIsOpen, pinId, src, setting }: ModalProps) => {
               ? setting
                 ? "Cài đặt"
                 : "Thêm vào hồ sơ"
-              : save
+              : save || saveOpen
               ? "Lưu vào bảng"
               : "Tuỳ chọn"}
           </div>
@@ -140,7 +149,7 @@ const Modal = ({ inProfile, setIsOpen, pinId, src, setting }: ModalProps) => {
                 <div onClick={() => navigate("/board/create")}>Bảng</div>
               </>
             )
-          ) : save ? (
+          ) : save || saveOpen ? (
             <>
               {boards &&
                 boards.data.map((board) => {
@@ -176,16 +185,18 @@ const Modal = ({ inProfile, setIsOpen, pinId, src, setting }: ModalProps) => {
                 <Pin className="button-icon" />
                 Lưu
               </div>
-              <div
-                className="button"
-                onClick={() =>
-                  pinId &&
-                  dispatch(deletePin({ boardId: boardId, pinId: pinId }))
-                }
-              >
-                <Delete className="button-icon" />
-                Xoá khỏi bảng
-              </div>
+              {boardId && boardId === auth && (
+                <div
+                  className="button"
+                  onClick={() =>
+                    pinId &&
+                    dispatch(deletePin({ boardId: boardId, pinId: pinId }))
+                  }
+                >
+                  <Delete className="button-icon" />
+                  Xoá khỏi bảng
+                </div>
+              )}
               <div className="button">
                 <Share className="button-icon" />
                 Gửi

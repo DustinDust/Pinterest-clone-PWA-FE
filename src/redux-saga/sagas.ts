@@ -10,7 +10,7 @@ import {
 } from "./sagas/Board";
 import { deletePin, getBoardsHasPin, getPin, getPins } from "./sagas/Pin";
 import { getProfile, updateProfile } from "./sagas/Profile";
-import { getTags, searchByTag } from "./sagas/Tag";
+import { getAllPins, getTags, searchByTag } from "./sagas/Tag";
 
 export default function* rootSaga() {
   yield all([
@@ -22,6 +22,7 @@ export default function* rootSaga() {
     getBoards(),
     getBoardsProfile(),
     getPins(),
+    getAllPins(),
     getPin(),
     getBoardsHasPin(),
     deletePin(),
