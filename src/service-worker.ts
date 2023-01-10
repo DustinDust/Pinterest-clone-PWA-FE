@@ -12,7 +12,7 @@ import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
+import { NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -57,8 +57,8 @@ registerRoute(
 // precache, in this case same-origin .png requests like those from in public/
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
-  ({ url }) =>
-    url.origin === self.location.origin && url.pathname.endsWith('.png'),
+  ({ url, request }) =>
+    url.origin === self.location.origin && request.destination === 'image',
   // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
     cacheName: 'images',
@@ -67,6 +67,16 @@ registerRoute(
       // least-recently used images are removed.
       new ExpirationPlugin({ maxEntries: 50 }),
     ],
+  })
+);
+
+registerRoute(
+  ({ url, request }) => {
+    console.log(url.origin);
+    return url.origin === 'http://localhost:3000' && request.method === 'GET';
+  },
+  new NetworkFirst({
+    cacheName: 'respose-cache',
   })
 );
 
