@@ -34,15 +34,18 @@ const UpdateBoard = () => {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
-  // const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+  const [newTags, setNewTags] = useState<Array<string>>([]);
 
   const handleUpdate = (id: number) => {
+    console.log(selectedTags)
     dispatch(
       updateBoard({
         boardId: id,
         image: location.state.img,
         name: name,
-        tags: tags
+        tags: selectedTags,
+        newTags: newTags
       })
     );
   };
@@ -66,6 +69,17 @@ const UpdateBoard = () => {
   useEffect(() => {
     dispatch(getTags());
   }, []);
+
+  const handleAddTags = (value: string) => {
+    const tags = String(value).split(',');
+    setSelectedTags(tags);
+  };
+
+  const handleAddNewTags = (value: string) => {
+    const tags = String(value).split(',');
+    console.log(tags)
+    setNewTags(tags);
+  };
 
   // useEffect(() => {
   //   if (getTagsResult && getTagsResult?.response) {
@@ -95,9 +109,17 @@ const UpdateBoard = () => {
           value: d.id,
           label: d.name
         }))}
+        onChange={handleAddTags}
         filterOption={(input, option) =>
           (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
         }
+      />
+      <Select
+        mode="tags"
+        allowClear
+        style={{ width: "100%", marginTop: "16px" }}
+        placeholder="Hoặc tạo tag mới"
+        onChange={handleAddNewTags}
       />
       <div className={`update-content ${boardId && "save-btn-wr"}`}>
         {!boardId &&
