@@ -16,8 +16,16 @@ function updateBoard(payload: Record<string, unknown>) {
     if (payload.tags) {
       for (let i = 0; i < (payload.tags as Array<any>).length; i++) {
         formData.append(
-          `idTags[${i}]`,
-          (payload.tags as Array<any>)[i].id as string
+          `tagIds[${i}]`,
+          (payload.tags as Array<any>)[i] as string
+        );
+      }
+    }
+    if (payload.newTags) {
+      for (let i = 0; i < (payload.newTags as Array<any>).length; i++) {
+        formData.append(
+          `tagNames[${i}]`,
+          (payload.newTags as Array<any>)[i] as string
         );
       }
     }
