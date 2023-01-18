@@ -1,27 +1,27 @@
-import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { ReactComponent as Close } from "assets/svg/close.svg";
-import { ReactComponent as Pin } from "assets/svg/pin.svg";
-import { ReactComponent as Share } from "assets/svg/share2.svg";
-import { ReactComponent as Delete } from "assets/svg/delete.svg";
-import { deletePin } from "components/Pin/actions";
-import { State } from "redux-saga/reducers";
-import { BoardsRequest, BoardsResponse } from "components/Profile";
-import { DELETE_PIN_CLEAR } from "components/Pin/reducers";
-import { UPDATE_BOARD_CLEAR } from "components/UpdateBoard/reducers";
-import { createToastSuccess } from "screens/Home/actions";
-import { updateBoard } from "components/UpdateBoard/actions";
-import { getBoardsProfile } from "components/Profile/actions";
-import "./styles.scss";
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { ReactComponent as Close } from "assets/svg/close.svg"
+import { ReactComponent as Pin } from "assets/svg/pin.svg"
+import { ReactComponent as Share } from "assets/svg/share2.svg"
+import { ReactComponent as Delete } from "assets/svg/delete.svg"
+import { deletePin } from "components/Pin/actions"
+import { State } from "redux-saga/reducers"
+import { BoardsRequest, BoardsResponse } from "components/Profile"
+import { DELETE_PIN_CLEAR } from "components/Pin/reducers"
+import { UPDATE_BOARD_CLEAR } from "components/UpdateBoard/reducers"
+import { createToastSuccess } from "screens/Home/actions"
+import { updateBoard } from "components/UpdateBoard/actions"
+import { getBoardsProfile } from "components/Profile/actions"
+import "./styles.scss"
 
 interface ModalProps {
-  inProfile?: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-  pinId?: number;
-  src?: string;
-  setting?: boolean;
-  saveOpen?: boolean;
+  inProfile?: boolean
+  setIsOpen: Dispatch<SetStateAction<boolean>>
+  pinId?: number
+  src?: string
+  setting?: boolean
+  saveOpen?: boolean
 }
 
 const Modal = ({
@@ -32,78 +32,77 @@ const Modal = ({
   setting,
   saveOpen
 }: ModalProps) => {
-  const auth = localStorage.getItem("id");
-  const { boardId } = useParams();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [save, setSave] = useState(false);
-  const [selectedImg, setSelectedImg] = useState<File | undefined>(undefined);
+  const auth = localStorage.getItem("id")
+  const { boardId } = useParams()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [save, setSave] = useState(false)
+  const [selectedImg, setSelectedImg] = useState<File | undefined>(undefined)
 
   const updateBoardResult = useSelector(
     (state: State) => state.updateBoardResult
-  );
-  const deletePinResult = useSelector((state: State) => state.deletePinResult);
+  )
+  const deletePinResult = useSelector((state: State) => state.deletePinResult)
 
   const getBoardsProfileResult = useSelector(
     (state: State) => state.getBoardsProfileResult
-  );
-  const boards = getBoardsProfileResult?.response as unknown as BoardsResponse;
+  )
+  const boards = getBoardsProfileResult?.response as unknown as BoardsResponse
 
   useEffect(() => {
-    if (selectedImg) navigate("/board/update", { state: { img: selectedImg } });
-  }, [selectedImg]);
+    if (selectedImg) navigate("/board/update", { state: { img: selectedImg } })
+  }, [selectedImg])
 
   useEffect(() => {
     dispatch(
       getBoardsProfile({
         userId: localStorage.getItem("id")
       } as unknown as BoardsRequest)
-    );
-  }, []);
+    )
+  }, [])
 
   useEffect(() => {
     if (deletePinResult) {
       if (deletePinResult.success) {
-        dispatch(createToastSuccess({ title: "Delete pin succeed!" }));
+        dispatch(createToastSuccess({ title: "Delete pin succeed!" }))
       } else if (deletePinResult.error) {
-        dispatch(createToastSuccess({ title: "Delete pin failed!" }));
+        dispatch(createToastSuccess({ title: "Delete pin failed!" }))
       }
-      navigate(-1);
+      navigate(-1)
       return () => {
         dispatch({
           type: DELETE_PIN_CLEAR
-        });
-      };
+        })
+      }
     }
-  }, [deletePinResult]);
+  }, [deletePinResult])
 
   useEffect(() => {
     if (updateBoardResult) {
       if (updateBoardResult.success) {
-        dispatch(createToastSuccess({ title: "Upload image succeed!" }));
+        dispatch(createToastSuccess({ title: "Upload image succeed!" }))
       } else if (updateBoardResult.error) {
-        dispatch(createToastSuccess({ title: "Upload image failed!" }));
+        dispatch(createToastSuccess({ title: "Upload image failed!" }))
       }
-      navigate(-1);
+      navigate(-1)
     }
     return () => {
       dispatch({
         type: UPDATE_BOARD_CLEAR
-      });
-    };
-  }, [updateBoardResult]);
+      })
+    }
+  }, [updateBoardResult])
 
   const handleUpdate = (id: number) => {
-    dispatch(updateBoard({ boardId: id, pinId: pinId }));
-  };
+    dispatch(updateBoard({ boardId: id, pinId: pinId }))
+  }
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("id");
-    navigate("/login");
-  };
-
+    localStorage.removeItem("accessToken")
+    localStorage.removeItem("refreshToken")
+    localStorage.removeItem("id")
+    navigate("/login")
+  }
   return (
     <>
       <div className="modal-background" onClick={() => setIsOpen(false)}></div>
@@ -142,7 +141,7 @@ const Modal = ({
                     accept="image/*"
                     className="img-picker"
                     onChange={(e) => {
-                      if (e.target.files) setSelectedImg(e.target.files[0]);
+                      if (e.target.files) setSelectedImg(e.target.files[0])
                     }}
                   ></input>
                 </div>
@@ -169,7 +168,7 @@ const Modal = ({
                       />
                       {board.name}
                     </div>
-                  );
+                  )
                 })}
               {/* <div
                 className="create-board"
@@ -210,7 +209,7 @@ const Modal = ({
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

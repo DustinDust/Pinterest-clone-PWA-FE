@@ -1,5 +1,5 @@
-import { all } from "redux-saga/effects";
-import { login, register } from "./sagas/Authentication";
+import { all } from "redux-saga/effects"
+import { login, register } from "./sagas/Authentication"
 import {
   createBoard,
   deleteBoard,
@@ -7,10 +7,18 @@ import {
   getBoards,
   getBoardsProfile,
   updateBoard
-} from "./sagas/Board";
-import { deletePin, getBoardsHasPin, getPin, getPins } from "./sagas/Pin";
-import { getProfile, updateProfile } from "./sagas/Profile";
-import { getAllPins, getTags, searchByTag } from "./sagas/Tag";
+} from "./sagas/Board"
+import { deletePin, getBoardsHasPin, getPin, getPins } from "./sagas/Pin"
+import { getProfile, updateProfile } from "./sagas/Profile"
+import { getAllPins, getTags, searchByTag } from "./sagas/Tag"
+import {
+  followUser,
+  getFollowers,
+  getFollowersUser,
+  getFollowings,
+  getFollowingsUser,
+  unFollowUser
+} from "./sagas/User"
 
 export default function* rootSaga() {
   yield all([
@@ -30,6 +38,12 @@ export default function* rootSaga() {
     getProfile(),
     updateProfile(),
     getTags(),
-    searchByTag()
-  ]);
+    searchByTag(),
+    followUser(),
+    unFollowUser(),
+    getFollowings(),
+    getFollowers(),
+    getFollowingsUser(),
+    getFollowersUser()
+  ])
 }

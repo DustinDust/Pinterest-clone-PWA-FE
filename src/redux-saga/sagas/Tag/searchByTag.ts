@@ -3,7 +3,7 @@ import axios from "../BaseApi";
 import { Request } from "interfaces";
 import { GET_ALL_PINS, SEARCH_BY_TAG } from "./../../actions";
 
-const searchByTagUrl = `/search`;
+const searchByTagUrl = `/search/pin`;
 
 function searchByTag(payload: Record<string, unknown>) {
   const { text, pageNum, pageSize } = payload;
