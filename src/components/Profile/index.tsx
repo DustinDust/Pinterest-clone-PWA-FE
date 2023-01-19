@@ -125,7 +125,7 @@ const Profile = () => {
     }
   }, [unFollowUserRes, followUserRes])
 
-  // const [active, setActive] = useState(1);
+  const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false)
   const [openSetting, setOpenSetting] = useState(false)
   const [openFollowing, setOpenFollowing] = useState(false)
@@ -203,7 +203,7 @@ const Profile = () => {
             Theo dõi
           </button>
         ))}
-      {/* <div className="boards">
+      <div className="boards">
         <div
           className={`board ${active === 0 ? "active" : ""}`}
           onClick={() => setActive(0)}
@@ -216,7 +216,7 @@ const Profile = () => {
         >
           Đã lưu
         </div>
-      </div> */}
+      </div>
       <div style={{ display: "flex", flexWrap: "wrap", paddingBottom: "72px" }}>
         {boards &&
           boards.data &&
