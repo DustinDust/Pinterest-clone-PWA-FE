@@ -24,12 +24,18 @@ import {
 } from "components/UpdateBoard/reducers"
 import { ToastResult } from "screens/Home/reducers"
 import {
+  AddCommentResult,
+  DeleteCommentResult,
   DeletePinResult,
   GetBoardsHasPinResult,
-  GetPinResult
+  GetPinResult,
+  UpdateCommentResult
 } from "components/Pin/reducers"
 import { UpdateProfileResult } from "components/UpdateProfile/reducers"
-import { SearchByTagResult } from "components/Search/reducers"
+import {
+  SearchByTagResult,
+  SearchByUserResult
+} from "components/Search/reducers"
 import { GetAllPinsResult } from "components/Feed/reducers"
 
 const rootReducer = combineReducers({
@@ -50,13 +56,17 @@ const rootReducer = combineReducers({
   getBoardsHasPinResult: GetBoardsHasPinResult,
   getTagsResult: GetTagsResult,
   searchByTagResult: SearchByTagResult,
+  searchByUserResult: SearchByUserResult,
   toastResult: ToastResult,
   getFollowersResult: GetFollowersResult,
   getFollowingsResult: GetFollowingsResult,
   getFollowersUserResult: GetFollowersUserResult,
   getFollowingsUserResult: GetFollowingsUserResult,
   followUserResult: FollowUserResult,
-  unFollowUserResult: UnFollowUserResult
+  unFollowUserResult: UnFollowUserResult,
+  addCommentResult: AddCommentResult,
+  updateCommentResult: UpdateCommentResult,
+  deleteCommentResult: DeleteCommentResult
 })
 
 export type State = ReturnType<typeof rootReducer>

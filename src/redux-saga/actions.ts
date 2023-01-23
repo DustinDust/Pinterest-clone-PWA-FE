@@ -21,6 +21,7 @@ export const GET_ALL_PINS = "GET_ALL_PINS"
 
 export const GET_TAGS = "GET_TAGS"
 export const SEARCH_BY_TAG = "SEARCH_BY_TAG"
+export const SEARCH_BY_USER = "SEARCH_BY_USER"
 
 export const GET_FOLLOWERS = "GET_FOLLOWERS"
 export const GET_FOLLOWINGS = "GET_FOLLOWINGS"
@@ -28,3 +29,7 @@ export const GET_FOLLOWERS_USER = "GET_FOLLOWERS_USER"
 export const GET_FOLLOWINGS_USER = "GET_FOLLOWINGS_USER"
 export const FOLLOW_USER = "FOLLOW_USER"
 export const UN_FOLLOW_USER = "UN_FOLLOW_USER"
+
+export const ADD_COMMENT = "ADD_COMMENT"
+export const UPDATE_COMMENT = "UPDATE_COMMENT"
+export const DELETE_COMMENT = "DELETE_COMMENT"

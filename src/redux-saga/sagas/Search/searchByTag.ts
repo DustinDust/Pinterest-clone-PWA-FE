@@ -1,7 +1,7 @@
 import { put, takeLatest, call } from "redux-saga/effects";
 import axios from "../BaseApi";
 import { Request } from "interfaces";
-import { GET_ALL_PINS, SEARCH_BY_TAG } from "./../../actions";
+import { GET_ALL_PINS, SEARCH_BY_TAG } from "../../actions";
 
 const searchByTagUrl = `/search/pin`;
 
@@ -11,7 +11,7 @@ function searchByTag(payload: Record<string, unknown>) {
     params: {
       pageNum: pageNum,
       pageSize: pageSize,
-      name: text
+      nameTag: text
     }
   });
 }

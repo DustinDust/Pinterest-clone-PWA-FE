@@ -10,7 +10,10 @@ import {
 } from "./sagas/Board"
 import { deletePin, getBoardsHasPin, getPin, getPins } from "./sagas/Pin"
 import { getProfile, updateProfile } from "./sagas/Profile"
-import { getAllPins, getTags, searchByTag } from "./sagas/Tag"
+import { getAllPins, searchByTag, searchByUser } from "./sagas/Search"
+import { getTags } from "./sagas/Tag"
+import { addComment, deleteComment, updateComment } from "./sagas/Comment"
+
 import {
   followUser,
   getFollowers,
@@ -39,11 +42,15 @@ export default function* rootSaga() {
     updateProfile(),
     getTags(),
     searchByTag(),
+    searchByUser(),
     followUser(),
     unFollowUser(),
     getFollowings(),
     getFollowers(),
     getFollowingsUser(),
-    getFollowersUser()
+    getFollowersUser(),
+    addComment(),
+    updateComment(),
+    deleteComment()
   ])
 }

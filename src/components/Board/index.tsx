@@ -1,59 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Masonry, useInfiniteLoader } from "masonic";
-import { useViewport } from "hooks";
-import Header from "components/Header";
-import ImageCard from "components/ImageCard";
-import { State } from "redux-saga/reducers";
-import { getPins } from "./actions";
-import "./styles.scss";
-import { useParams } from "react-router-dom";
-import { GET_PINS_CLEAR } from "./reducers";
+import React, { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { Masonry, useInfiniteLoader } from "masonic"
+import { useViewport } from "hooks"
+import Header from "components/Header"
+import ImageCard from "components/ImageCard"
+import { State } from "redux-saga/reducers"
+import { getPins } from "./actions"
+import "./styles.scss"
+import { useParams } from "react-router-dom"
+import { GET_PINS_CLEAR } from "./reducers"
 
 export interface BoardRequest {
-  boardId: number;
-  pageNum: number;
-  pageSize: number;
+  boardId: number
+  pageNum: number
+  pageSize: number
 }
 
 export interface PinResult {
-  id: number;
-  url: string;
-  filename: string;
-  name: string;
-  createdAt: string;
+  id: number
+  url: string
+  filename: string
+  name: string
+  createdAt: string
+  comments: any
 }
 
 interface BoardData {
-  id: number;
-  name: string;
-  visibility: number;
-  description: string;
-  pins: PinResult[];
+  id: number
+  name: string
+  visibility: number
+  description: string
+  pins: PinResult[]
 }
 
 interface BoardResponse {
-  data: BoardData;
-  pageIndex: number;
-  pageSize: number;
-  total: number;
+  data: BoardData
+  pageIndex: number
+  pageSize: number
+  total: number
 }
 
 const Board = () => {
-  const dispatch = useDispatch();
-  const { boardId } = useParams();
-  const [pins, setPins] = useState<PinResult[]>([]);
-  const [pageNum, setPageNum] = useState(1);
-  const [conti, setConti] = useState(true);
-  const getPinsResult = useSelector((state: State) => state.getPinsResult);
+  const dispatch = useDispatch()
+  const { boardId } = useParams()
+  const [pins, setPins] = useState<PinResult[]>([])
+  const [pageNum, setPageNum] = useState(1)
+  const [conti, setConti] = useState(true)
+  const getPinsResult = useSelector((state: State) => state.getPinsResult)
 
   useEffect(() => {
     return () => {
       dispatch({
         type: GET_PINS_CLEAR
-      });
-    };
-  }, []);
+      })
+    }
+  }, [])
 
   useEffect(() => {
     dispatch(
@@ -62,25 +63,25 @@ const Board = () => {
         pageNum: 1,
         pageSize: parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
       } as BoardRequest)
-    );
-  }, []);
+    )
+  }, [])
 
   useEffect(() => {
     if (getPinsResult) {
       setPins([
         ...pins,
         ...(getPinsResult?.response as unknown as BoardResponse).data.pins
-      ]);
+      ])
       if (
         (getPinsResult?.response as unknown as BoardResponse).data.pins.length <
         parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
       ) {
-        setConti(false);
+        setConti(false)
       } else {
-        setPageNum((pageNum) => pageNum + 1);
+        setPageNum((pageNum) => pageNum + 1)
       }
     }
-  }, [getPinsResult]);
+  }, [getPinsResult])
 
   const fetchMoreItems = (startIndex: number, stopIndex: number) => {
     if (conti) {
@@ -90,21 +91,21 @@ const Board = () => {
           pageNum: pageNum,
           pageSize: parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
         } as BoardRequest)
-      );
+      )
     }
-  };
+  }
 
   const maybeLoadMore = useInfiniteLoader(fetchMoreItems, {
     isItemLoaded: (index, items) => !!items[index],
     minimumBatchSize: 32,
     threshold: 3
-  });
+  })
 
-  const viewPort = useViewport();
+  const viewPort = useViewport()
   const itemWidth =
     viewPort.width <= 600
       ? viewPort.width / 2
-      : Math.floor(viewPort.width / 200) - 1;
+      : Math.floor(viewPort.width / 200) - 1
 
   return (
     <div className="board">
@@ -125,6 +126,6 @@ const Board = () => {
         />
       )}
     </div>
-  );
-};
-export default Board;
+  )
+}
+export default Board
