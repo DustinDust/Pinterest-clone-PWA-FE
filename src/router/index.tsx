@@ -1,33 +1,94 @@
-import React from "react";
+import React, { useEffect, useState } from "react"
 import {
   BrowserRouter,
   Navigate,
   Outlet,
   Route,
-  Routes
-} from "react-router-dom";
-import Home from "screens/Home";
-import Login from "screens/Login";
-import Register from "screens/Register";
-import Feed from "components/Feed";
-import Profile from "components/Profile";
-import Search from "components/Search";
-import Board from "components/Board";
-import CreateBoard from "./../components/CreateBoard/index";
-import UpdateBoard from "./../components/UpdateBoard/index";
-import Pin from "components/Pin";
-import UpdateProfile from "components/UpdateProfile";
+  Routes,
+  useNavigate
+} from "react-router-dom"
+import Home from "screens/Home"
+import Login from "screens/Login"
+import Register from "screens/Register"
+import Feed from "components/Feed"
+import Profile from "components/Profile"
+import Search from "components/Search"
+import Board from "components/Board"
+import CreateBoard from "./../components/CreateBoard/index"
+import UpdateBoard from "./../components/UpdateBoard/index"
+import Pin from "components/Pin"
+import UpdateProfile from "components/UpdateProfile"
+import io from "socket.io-client"
+import { Socket } from "interfaces"
+import logo from "../assets/images/favicon.png"
+
+const socket = io(`https://pinterest-clone-backend.onrender.com/user`, {
+  transports: ["websocket"]
+})
 
 const ProtectedRoute = ({ user, redirectPath = "/login", children }: any) => {
   if (!user) {
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to={redirectPath} replace />
   }
 
-  return children ? children : <Outlet />;
-};
+  return children ? children : <Outlet />
+}
 
-function Router() {
-  const user = localStorage.getItem("refreshToken");
+const Router = () => {
+  const user = localStorage.getItem("refreshToken")
+  const id = localStorage.getItem("id")
+
+  const notify = (data: Socket) => {
+    if (!("Notification" in window)) {
+      // Check if the browser supports notifications
+      alert("This browser does not support desktop notification")
+    } else if (Notification.permission === "granted") {
+      // Check whether notification permissions have already been granted;
+      // if so, create a notification
+      console.log(data)
+      const notification = new Notification("Pinterest", {
+        body: `${data.data.displayName} đã bắt đầu theo dõi bạn`,
+        icon: logo
+      })
+      notification.onclick = (event) => {
+        event.preventDefault()
+        window.open(`http://localhost:3000/${data.data.id}`, "_blank")
+      }
+      // …
+    } else if (Notification.permission !== "denied") {
+      // We need to ask the user for permission
+      Notification.requestPermission().then((permission) => {
+        // If the user accepts, let's create a notification
+        if (permission === "granted") {
+          const notification = new Notification("Pinterest", {
+            body: `${data.data.displayName} đã bắt đầu theo dõi bạn`,
+            icon: logo
+          })
+          notification.onclick = (event) => {
+            event.preventDefault()
+            window.open(`http://localhost:3000/${data.data.id}`, "_blank")
+          }
+          // …
+        }
+      })
+    }
+
+    // At last, if the user has denied notifications, and you
+    // want to be respectful there is no need to bother them anymore.
+  }
+
+  useEffect(() => {
+    if (id) {
+      socket.on(`${id}`, (data) => {
+        notify(data)
+      })
+    }
+
+    return () => {
+      socket.off(`${id}`)
+    }
+  }, [id])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -57,7 +118,7 @@ function Router() {
         <Route path="register" element={<Register />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
-export default Router;
+export default Router
