@@ -1,3 +1,4 @@
+/// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
 // This service worker can be customized!
@@ -7,12 +8,13 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
-import { BackgroundSyncPlugin } from "workbox-background-sync"
 import { clientsClaim } from "workbox-core"
 import { ExpirationPlugin } from "workbox-expiration"
 import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching"
 import { registerRoute } from "workbox-routing"
-import { StaleWhileRevalidate } from "workbox-strategies"
+import { NetworkFirst, StaleWhileRevalidate } from "workbox-strategies"
+
+declare const self: ServiceWorkerGlobalScope
 
 clientsClaim()
 
@@ -28,20 +30,24 @@ precacheAndRoute(self.__WB_MANIFEST)
 const fileExtensionRegexp = new RegExp("/[^/?]+\\.[^/]+$")
 registerRoute(
   // Return false to exempt requests from being fulfilled by index.html.
-  ({ request, url }) => {
+  ({ request, url }: { request: Request; url: URL }) => {
     // If this isn't a navigation, skip.
     if (request.mode !== "navigate") {
       return false
-    } // If this is a URL that starts with /_, skip.
+    }
 
+    // If this is a URL that starts with /_, skip.
     if (url.pathname.startsWith("/_")) {
       return false
-    } // If this looks like a URL for a resource, because it contains // a file extension, skip.
+    }
 
+    // If this looks like a URL for a resource, because it contains
+    // a file extension, skip.
     if (url.pathname.match(fileExtensionRegexp)) {
       return false
-    } // Return true to signal that we want to use the handler.
+    }
 
+    // Return true to signal that we want to use the handler.
     return true
   },
   createHandlerBoundToURL(process.env.PUBLIC_URL + "/index.html")
@@ -51,8 +57,9 @@ registerRoute(
 // precache, in this case same-origin .png requests like those from in public/
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
-  ({ url }) =>
-    url.origin === self.location.origin && url.pathname.endsWith(".png"), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  ({ url, request }) =>
+    url.origin === self.location.origin && request.destination === "image",
+  // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
     cacheName: "images",
     plugins: [
@@ -64,10 +71,15 @@ registerRoute(
 )
 
 registerRoute(
-  ({ url }) => url.origin === "https://jsonplaceholder.typicode.com",
-  new StaleWhileRevalidate({
-    cacheName: "jsonplaceholder",
-    plugins: [new BackgroundSyncPlugin("jsonplaceholder-queue")]
+  ({ url, request }) => {
+    console.log(url.origin)
+    return (
+      url.origin === "https://pinterest-clone-backend.onrender.com" &&
+      request.method === "GET"
+    )
+  },
+  new NetworkFirst({
+    cacheName: "respose-cache"
   })
 )
 
