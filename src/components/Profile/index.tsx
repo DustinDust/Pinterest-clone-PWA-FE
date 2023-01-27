@@ -217,7 +217,7 @@ const Profile = () => {
           Đã lưu
         </div>
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap", paddingBottom: "72px" }}>
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
         {boards &&
           boards.data &&
           boards.data.map((board) => (

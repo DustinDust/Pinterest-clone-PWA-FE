@@ -160,6 +160,7 @@ const Pin = () => {
 
   const handleComment = () => {
     dispatch(addComment({ content: comment, pinId: pinId }))
+    setComment("")
   }
 
   const handleCancelComment = () => {

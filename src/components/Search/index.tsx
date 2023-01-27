@@ -100,7 +100,7 @@ const Search = () => {
         handleSearch={handleSearch}
       />
       <Masonry
-        style={{ marginTop: "72px", marginBottom: "72px" }}
+        style={{ marginTop: "24px" }}
         items={pins}
         key={text}
         columnGutter={8} // Set khoảng cách giữa các column
