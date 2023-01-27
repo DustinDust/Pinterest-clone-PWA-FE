@@ -209,7 +209,7 @@ const Pin = () => {
           )}
         </div>
       </div>
-      <div className="img-note" style={{ marginBottom: "-48px" }}>
+      <div className="img-note" style={{ marginBottom: "12px" }}>
         Các bảng lưu pin
       </div>
       <div style={{ display: "flex" }}>
