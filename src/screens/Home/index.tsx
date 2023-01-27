@@ -48,7 +48,7 @@ const Home = () => {
 
   return (
     <div className="Pinhome">
-      {isOnline && <Offline />}
+      {!isOnline && <Offline />}
       <Outlet />
       <ToastContainer />
       <BottomNavigation />
