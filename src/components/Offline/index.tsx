@@ -1,5 +1,4 @@
 import React from "react";
-import { ReactComponent as OfflineCloud } from "assets/svg/cloud-offline.svg";
 import logo from "../Offline/logo.png";
 import "./styles.scss";
 

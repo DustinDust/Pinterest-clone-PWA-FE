@@ -45,17 +45,12 @@ const Home = () => {
       })
     }
   }, [toastResult])
-  
+
   return (
     <div className="Pinhome">
-      {isOnline ? (
-        <>
-          <Outlet />
-          <ToastContainer />
-        </>
-      ) : (
-        <Offline></Offline>
-      )}
+      {!isOnline && <Offline />}
+      <Outlet />
+      <ToastContainer />
       <BottomNavigation />
     </div>
   )

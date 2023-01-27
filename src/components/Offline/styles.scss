@@ -1,5 +1,7 @@
 .offline-wr {
-  height: 100vh;
+  position: fixed;
+  top: 0;
+  z-index: 10;
   .offline {
     height: 48px;
     text-align: center;
