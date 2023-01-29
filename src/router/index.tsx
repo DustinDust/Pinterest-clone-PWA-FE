@@ -60,7 +60,10 @@ const Router = () => {
       )
       notification.onclick = (event) => {
         event.preventDefault()
-        window.open(`http://localhost:3000/${data.data.id}`, "_blank")
+        window.open(
+          `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
+          "_blank"
+        )
       }
       // …
     } else if (Notification.permission !== "denied") {
@@ -74,7 +77,10 @@ const Router = () => {
           })
           notification.onclick = (event) => {
             event.preventDefault()
-            window.open(`http://localhost:3000/${data.data.id}`, "_blank")
+            window.open(
+              `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
+              "_blank"
+            )
           }
           // …
         }
