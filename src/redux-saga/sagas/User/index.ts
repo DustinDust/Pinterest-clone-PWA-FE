@@ -8,6 +8,7 @@ import {
   watchGetFollowers as getFollowers,
   watchGetFollowersUser as getFollowersUser
 } from "./getFollowers"
+import getNoti from "./getNoti"
 
 export {
   followUser,
@@ -15,5 +16,6 @@ export {
   getFollowings,
   getFollowers,
   getFollowingsUser,
-  getFollowersUser
+  getFollowersUser,
+  getNoti
 }

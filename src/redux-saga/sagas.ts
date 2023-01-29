@@ -20,6 +20,7 @@ import {
   getFollowersUser,
   getFollowings,
   getFollowingsUser,
+  getNoti,
   unFollowUser
 } from "./sagas/User"
 
@@ -51,6 +52,7 @@ export default function* rootSaga() {
     getFollowersUser(),
     addComment(),
     updateComment(),
-    deleteComment()
+    deleteComment(),
+    getNoti()
   ])
 }

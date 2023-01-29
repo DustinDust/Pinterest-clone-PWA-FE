@@ -37,6 +37,7 @@ import {
   SearchByUserResult
 } from "components/Search/reducers"
 import { GetAllPinsResult } from "components/Feed/reducers"
+import { GetNotiResult } from "components/Notification/reducers"
 
 const rootReducer = combineReducers({
   loginResult: LoginResult,
@@ -66,7 +67,8 @@ const rootReducer = combineReducers({
   unFollowUserResult: UnFollowUserResult,
   addCommentResult: AddCommentResult,
   updateCommentResult: UpdateCommentResult,
-  deleteCommentResult: DeleteCommentResult
+  deleteCommentResult: DeleteCommentResult,
+  getNotiResult: GetNotiResult
 })
 
 export type State = ReturnType<typeof rootReducer>

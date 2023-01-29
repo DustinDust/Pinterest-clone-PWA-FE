@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import {
   BrowserRouter,
   Navigate,
   Outlet,
   Route,
-  Routes,
-  useNavigate
+  Routes
 } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import Home from "screens/Home"
 import Login from "screens/Login"
 import Register from "screens/Register"
@@ -17,10 +17,12 @@ import Board from "components/Board"
 import CreateBoard from "./../components/CreateBoard/index"
 import UpdateBoard from "./../components/UpdateBoard/index"
 import Pin from "components/Pin"
+import Noti from "components/Notification"
 import UpdateProfile from "components/UpdateProfile"
 import io from "socket.io-client"
 import { Socket } from "interfaces"
 import logo from "../assets/images/favicon.png"
+import { getNoti } from "components/Notification/actions"
 
 const socket = io(`https://pinterest-clone-backend.onrender.com/user`, {
   transports: ["websocket"]
@@ -35,6 +37,7 @@ const ProtectedRoute = ({ user, redirectPath = "/login", children }: any) => {
 }
 
 const Router = () => {
+  const dispatch = useDispatch()
   const user = localStorage.getItem("refreshToken")
   const id = localStorage.getItem("id")
 
@@ -45,11 +48,16 @@ const Router = () => {
     } else if (Notification.permission === "granted") {
       // Check whether notification permissions have already been granted;
       // if so, create a notification
-      console.log(data)
       const notification = new Notification("Pinterest", {
         body: `${data.data.displayName} đã bắt đầu theo dõi bạn`,
         icon: logo
       })
+      dispatch(
+        getNoti({
+          pageNum: 1,
+          pageSize: parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
+        })
+      )
       notification.onclick = (event) => {
         event.preventDefault()
         window.open(`http://localhost:3000/${data.data.id}`, "_blank")
@@ -102,7 +110,7 @@ const Router = () => {
         >
           <Route path="" element={<Feed />} />
           <Route path="search" element={<Search />} />
-          {/* <Route path="notification" element={<Search />} /> */}
+          <Route path="notifications" element={<Noti />} />
           <Route path="profile" element={<Profile />} />
           <Route path="settings/profile" element={<UpdateProfile />} />
           <Route path=":userId" element={<Profile />} />

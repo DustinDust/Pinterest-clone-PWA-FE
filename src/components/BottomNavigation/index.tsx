@@ -22,10 +22,10 @@ const tabs = [
     component: Search,
     path: Tabs.Search
   },
-  // {
-  //   component: Comment,
-  //   path: Tabs.Noti
-  // },
+  {
+    component: Comment,
+    path: Tabs.Noti
+  },
   {
     component: Profile,
     path: Tabs.Profile
@@ -42,8 +42,10 @@ const BottomNavigation = () => {
       ? setState(0)
       : pathname === "/search"
       ? setState(1)
-      : pathname === "/profile"
+      : pathname === "/notifications"
       ? setState(2)
+      : pathname === "/profile"
+      ? setState(3)
       : void 0
   }, [pathname])
 
