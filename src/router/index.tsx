@@ -42,30 +42,44 @@ const Router = () => {
   const id = localStorage.getItem("id")
 
   const notify = (data: Socket) => {
+    console.log(data)
     if (!("Notification" in window)) {
       // Check if the browser supports notifications
       alert("This browser does not support desktop notification")
     } else if (Notification.permission === "granted") {
       // Check whether notification permissions have already been granted;
       // if so, create a notification
-      console.log(data)
-      const notification = new Notification("Pinterest", {
-        body: `${data.data.displayName} đã bắt đầu theo dõi bạn`,
-        icon: logo
-      })
+      if (data.event === "follow") {
+        const notification = new Notification("Pinterest", {
+          body: `${data.data.displayName} đã bắt đầu theo dõi bạn`,
+          icon: logo
+        })
+        notification.onclick = (event) => {
+          event.preventDefault()
+          window.open(
+            `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
+            "_blank"
+          )
+        }
+      } else if (data.event === "comment") {
+        const notification = new Notification("Pinterest", {
+          body: `${data.data.displayName} đã thêm một nhận xét vào ảnh của bạn`,
+          icon: logo
+        })
+        notification.onclick = (event) => {
+          event.preventDefault()
+          window.open(
+            `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
+            "_blank"
+          )
+        }
+      }
       dispatch(
         getNoti({
           pageNum: 1,
           pageSize: parseInt(`${process.env.REACT_APP_FETCH_COUNT || 10}`)
         })
       )
-      notification.onclick = (event) => {
-        event.preventDefault()
-        window.open(
-          `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
-          "_blank"
-        )
-      }
       // …
     } else if (Notification.permission !== "denied") {
       // We need to ask the user for permission
