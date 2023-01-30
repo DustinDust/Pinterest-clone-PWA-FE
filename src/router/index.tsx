@@ -56,10 +56,7 @@ const Router = () => {
         })
         notification.onclick = (event) => {
           event.preventDefault()
-          window.open(
-            `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
-            "_blank"
-          )
+          window.open(`/${data.data.id}`, "_blank")
         }
       } else if (data.event === "comment") {
         const notification = new Notification("Pinterest", {
@@ -68,10 +65,7 @@ const Router = () => {
         })
         notification.onclick = (event) => {
           event.preventDefault()
-          window.open(
-            `${process.env.REACT_APP_REST_ENDPOINT}/pin/${data.data.pinId}`,
-            "_blank"
-          )
+          window.open(`/pin/${data.data.pinId}`, "_blank")
         }
       }
       dispatch(
@@ -93,10 +87,7 @@ const Router = () => {
             })
             notification.onclick = (event) => {
               event.preventDefault()
-              window.open(
-                `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
-                "_blank"
-              )
+              window.open(`/${data.data.id}`, "_blank")
             }
           } else if (data.event === "comment") {
             const notification = new Notification("Pinterest", {
@@ -105,10 +96,7 @@ const Router = () => {
             })
             notification.onclick = (event) => {
               event.preventDefault()
-              window.open(
-                `${process.env.REACT_APP_REST_ENDPOINT}/pin/${data.data.pinId}`,
-                "_blank"
-              )
+              window.open(`/pin/${data.data.pinId}`, "_blank")
             }
           }
           // …
