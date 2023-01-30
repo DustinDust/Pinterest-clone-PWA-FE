@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 // import { Masonry } from "masonic";
 // import { useViewport } from "hooks";
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { ReactComponent as Dot } from "assets/svg/dot.svg"
 import { PinResult } from "components/Board"
@@ -19,6 +19,11 @@ import {
   updateComment
 } from "./actions"
 import "./styles.scss"
+import {
+  followUser,
+  getFollowingsUser,
+  unFollowUser
+} from "components/Profile/actions"
 
 export interface PinRequest {
   pinId: number
@@ -50,13 +55,13 @@ const Comment = ({ comment }: { comment: any }) => {
   return (
     <div className="comment">
       <img
-        src="https://i.pinimg.com/75x75_RS/02/22/bd/0222bd8273232e319e2fc1dd2c1c944d.jpg"
-        alt="asd"
+        src={comment.user.avatarUrl}
+        alt={comment.user.displayName}
         className="comment-img"
       />
       <div>
         <div className="comment-top">
-          <div className="comment-name">reidokun</div>
+          <div className="comment-name">{comment.user.displayName}</div>
           {update ? (
             <>
               <input
@@ -123,15 +128,24 @@ const Pin = () => {
   const [comment, setComment] = useState("")
   const { pinId } = useParams()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const [isFollowing, setIsFollowing] = useState(false)
+
+  const followUserResult = useSelector((state: State) => state.followUserResult)
+  const followUserRes = followUserResult?.response
+  const unFollowUserResult = useSelector(
+    (state: State) => state.unFollowUserResult
+  )
+  const unFollowUserRes = unFollowUserResult?.response
+
+  const getFollowingsUserResult = useSelector(
+    (state: State) => state.getFollowingsUserResult
+  )
+  const followingsUser = getFollowingsUserResult?.response
 
   const getPinResult = useSelector((state: State) => state.getPinResult)
   const pin = getPinResult?.response as unknown as PinResult
-
-  const getBoardsHasPinResult = useSelector(
-    (state: State) => state.getBoardsHasPinResult
-  )
-  const boards = getBoardsHasPinResult?.response
-    ?.data as unknown as BoardHasPin[]
 
   const addCommentResult = useSelector((state: State) => state.addCommentResult)
   const updateCommentResult = useSelector(
@@ -153,6 +167,35 @@ const Pin = () => {
       dispatch(getPin({ pinId: Number(pinId) } as PinRequest))
     }
   }, [addCommentResult, updateCommentResult, deleteCommentResult])
+
+  useEffect(() => {
+    dispatch(getFollowingsUser({ userId: undefined }))
+  }, [])
+
+  useEffect(() => {
+    if (followingsUser && followingsUser.following) {
+      setIsFollowing(
+        (followingsUser.following as Array<any>).some(
+          (user) => user.id === Number(pin.user.id)
+        )
+      )
+    }
+  }, [followingsUser])
+
+  useEffect(() => {
+    if (unFollowUserRes || followUserRes) {
+      dispatch(getPin({ pinId: Number(pinId) } as PinRequest))
+      dispatch(getFollowingsUser({ userId: undefined }))
+    }
+  }, [unFollowUserRes, followUserRes])
+
+  const handleFollow = () => {
+    dispatch(followUser({ id: pin.user.id }))
+  }
+
+  const handleUnFollow = () => {
+    dispatch(unFollowUser({ id: pin.user.id }))
+  }
 
   const viewPort = useViewport()
   const itemWidth =
@@ -177,15 +220,50 @@ const Pin = () => {
       <div className="img-attribute">
         <div className="img-name">{pin && pin.name}</div>
       </div>
+      {pin && pin.user && (
+        <div className="user-attribute">
+          {pin.user.avatarUrl && (
+            <img
+              src={pin.user.avatarUrl}
+              alt={pin.user.displayName}
+              className="user-img"
+              onClick={() => navigate(`/${pin.user.id}`)}
+            />
+          )}
+          <div
+            className="user-name-fl"
+            onClick={() => navigate(`/${pin.user.id}`)}
+          >
+            {pin.user.displayName && (
+              <div className="user-name">{pin.user.displayName}</div>
+            )}
+            {pin.user.followersCount && (
+              <div>{pin.user.followersCount} người theo dõi</div>
+            )}
+          </div>
+          {pin.user.id &&
+            pin.user.id !== Number(localStorage.getItem("id")) &&
+            (isFollowing ? (
+              <button className="user-btn-un" onClick={handleUnFollow}>
+                Bỏ theo dõi
+              </button>
+            ) : (
+              <button className="user-btn" onClick={handleFollow}>
+                Theo dõi
+              </button>
+            ))}
+        </div>
+      )}
       <div className="comments">
         {pin && (
           <>
             <div className="comments-header">
               {pin.comments ? pin.comments.length : 0} nhận xét
             </div>
-            {pin.comments.map((comment: unknown) => {
-              return <Comment comment={comment} />
-            })}
+            {pin.comments.length > 0 &&
+              pin.comments.map((comment: unknown) => {
+                return <Comment comment={comment} key={(comment as any).id} />
+              })}
           </>
         )}
         <div className="comment-inputs">
@@ -209,19 +287,6 @@ const Pin = () => {
             </>
           )}
         </div>
-      </div>
-      <div className="img-note" style={{ marginBottom: "12px" }}>
-        Các bảng lưu pin
-      </div>
-      <div style={{ display: "flex" }}>
-        {boards &&
-          boards.map((board, i) => (
-            <BoardCard
-              style={{ width: itemWidth }}
-              key={board.id}
-              boardInPin={board}
-            />
-          ))}
       </div>
     </div>
   )

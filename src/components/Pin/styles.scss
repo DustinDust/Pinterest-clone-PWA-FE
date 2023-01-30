@@ -25,6 +25,49 @@
     .img-des {
     }
   }
+  .user-attribute {
+    display: flex;
+    margin: 0 12px 24px 12px;
+    .user-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+    }
+    .user-name-fl {
+      flex: 1;
+      margin-left: 8px;
+      .user-name {
+        font-weight: 600;
+      }
+    }
+    .user-btn {
+      border: 0;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      box-sizing: border-box;
+      background-color: #e60023;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 24px;
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .user-btn-un {
+      border: 0;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      box-sizing: border-box;
+      background-color: #efefef;
+      cursor: pointer;
+      border-radius: 24px;
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+  }
   .other {
     margin-top: 24px;
     text-align: center;

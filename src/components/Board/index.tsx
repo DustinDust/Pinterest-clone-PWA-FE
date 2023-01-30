@@ -23,6 +23,13 @@ export interface PinResult {
   name: string
   createdAt: string
   comments: any
+  user: {
+    id: number
+    username: string
+    displayName: string
+    avatarUrl: string
+    followersCount: number
+  }
 }
 
 interface BoardData {

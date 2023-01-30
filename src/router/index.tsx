@@ -48,6 +48,7 @@ const Router = () => {
     } else if (Notification.permission === "granted") {
       // Check whether notification permissions have already been granted;
       // if so, create a notification
+      console.log(data)
       const notification = new Notification("Pinterest", {
         body: `${data.data.displayName} đã bắt đầu theo dõi bạn`,
         icon: logo
@@ -94,6 +95,7 @@ const Router = () => {
   useEffect(() => {
     if (id) {
       socket.on(`${id}`, (data) => {
+        console.log(data)
         notify(data)
       })
     }
