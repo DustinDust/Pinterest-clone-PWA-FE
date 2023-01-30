@@ -37,5 +37,6 @@ export interface Socket {
     avatarUrl: string
     displayName: string
     id: number
+    pinId: number
   }
 }

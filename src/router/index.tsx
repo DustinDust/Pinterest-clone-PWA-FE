@@ -69,7 +69,7 @@ const Router = () => {
         notification.onclick = (event) => {
           event.preventDefault()
           window.open(
-            `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
+            `${process.env.REACT_APP_REST_ENDPOINT}/pin/${data.data.pinId}`,
             "_blank"
           )
         }
@@ -106,7 +106,7 @@ const Router = () => {
             notification.onclick = (event) => {
               event.preventDefault()
               window.open(
-                `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
+                `${process.env.REACT_APP_REST_ENDPOINT}/pin/${data.data.pinId}`,
                 "_blank"
               )
             }
