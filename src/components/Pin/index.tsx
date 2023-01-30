@@ -6,11 +6,9 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { ReactComponent as Dot } from "assets/svg/dot.svg"
 import { PinResult } from "components/Board"
-import BoardCard from "components/BoardCard"
 import Header from "components/Header"
 import Modal from "components/Modal"
 import { State } from "redux-saga/reducers"
-import { useViewport } from "hooks"
 import {
   addComment,
   deleteComment,
@@ -197,10 +195,6 @@ const Pin = () => {
     dispatch(unFollowUser({ id: pin.user.id }))
   }
 
-  const viewPort = useViewport()
-  const itemWidth =
-    viewPort.width <= 900 ? viewPort.width / 2 : viewPort.width / 3
-
   const handleComment = () => {
     dispatch(addComment({ content: comment, pinId: pinId }))
     setComment("")
@@ -261,7 +255,7 @@ const Pin = () => {
               {pin.comments ? pin.comments.length : 0} nhận xét
             </div>
             {pin.comments.length > 0 &&
-              pin.comments.map((comment: unknown) => {
+              pin.comments.reverse().map((comment: unknown) => {
                 return <Comment comment={comment} key={(comment as any).id} />
               })}
           </>

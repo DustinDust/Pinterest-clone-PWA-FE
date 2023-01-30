@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react"
-import Header from "components/Header"
-import "./styles.scss"
-import { useViewport } from "hooks"
-import BoardCard from "components/BoardCard"
-import Modal from "components/Modal"
 import { useDispatch, useSelector } from "react-redux"
 import { State } from "redux-saga/reducers"
+import { useParams } from "react-router-dom"
+import { Masonry } from "masonic"
+import Header from "components/Header"
+import BoardCard from "components/BoardCard"
+import Modal from "components/Modal"
+import Follow from "components/Follow"
+import ImageCard from "components/ImageCard"
+import { PinResult } from "components/Board"
+import { useViewport } from "hooks"
 import {
   followUser,
   getBoards,
@@ -13,11 +17,11 @@ import {
   getFollowersUser,
   getFollowings,
   getFollowingsUser,
+  getPinsUser,
   getProfile,
   unFollowUser
 } from "./actions"
-import { useParams } from "react-router-dom"
-import Follow from "components/Follow"
+import "./styles.scss"
 
 export interface ProfileInterface {
   id: number
@@ -62,6 +66,11 @@ const Profile = () => {
   const getBoardsResult = useSelector((state: State) => state.getBoardsResult)
   const boards = getBoardsResult?.response as unknown as BoardsResponse
 
+  const getPinsUserResult = useSelector(
+    (state: State) => state.getPinsUserResult
+  )
+  const pins = getPinsUserResult?.response?.pins
+
   const getFollowersResult = useSelector(
     (state: State) => state.getFollowersResult
   )
@@ -99,7 +108,10 @@ const Profile = () => {
   }, [userId])
 
   useEffect(() => {
-    if (profile) dispatch(getBoards({ userId: profile.id } as BoardsRequest))
+    if (profile) {
+      dispatch(getBoards({ userId: profile.id } as BoardsRequest))
+      dispatch(getPinsUser({ userId: profile.id }))
+    }
   }, [profile])
 
   useEffect(() => {
@@ -125,7 +137,7 @@ const Profile = () => {
     }
   }, [unFollowUserRes, followUserRes])
 
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(1)
   const [open, setOpen] = useState(false)
   const [openSetting, setOpenSetting] = useState(false)
   const [openFollowing, setOpenFollowing] = useState(false)
@@ -217,17 +229,42 @@ const Profile = () => {
           Đã lưu
         </div>
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {boards &&
-          boards.data &&
-          boards.data.map((board) => (
-            <BoardCard
-              style={{ width: itemWidth }}
-              key={board.id}
-              props={board}
-            />
-          ))}
-      </div>
+      {active === 0 ? (
+        pins && (pins as unknown[]).length === 0 ? (
+          <div
+            style={{
+              display: "flex",
+              marginTop: "48px",
+              fontWeight: "600",
+              fontSize: "18px",
+              justifyContent: "center"
+            }}
+          >
+            Chưa tạo ghim nào
+          </div>
+        ) : (
+          <Masonry
+            style={{ marginTop: "24px" }}
+            items={pins as PinResult[]}
+            columnGutter={8} // Set khoảng cách giữa các column
+            columnWidth={itemWidth - 24} // Set chiều rộng tối thiểu là 300px
+            overscanBy={5} // Giá trị để render trước khi scroll tới
+            render={ImageCard} // Grid item của component
+          />
+        )
+      ) : (
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {boards &&
+            boards.data &&
+            boards.data.map((board) => (
+              <BoardCard
+                style={{ width: itemWidth }}
+                key={board.id}
+                props={board}
+              />
+            ))}
+        </div>
+      )}
     </div>
   )
 }

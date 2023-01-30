@@ -89,3 +89,13 @@ export const GetFollowingsUserResult = createReducer(
   GET_FOLLOWINGS_USER_FAILED,
   GET_FOLLOWINGS_USER_CLEAR
 )
+
+export const GET_PINS_USER_SUCCESS = "GET_PINS_USER_SUCCESS";
+export const GET_PINS_USER_FAILED = "GET_PINS_USER_FAILED";
+export const GET_PINS_USER_CLEAR = "GET_PINS_USER_CLEAR";
+
+export const GetPinsUserResult = createReducer(
+  GET_PINS_USER_SUCCESS,
+  GET_PINS_USER_FAILED,
+  GET_PINS_USER_CLEAR
+);

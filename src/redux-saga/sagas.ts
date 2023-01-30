@@ -8,7 +8,13 @@ import {
   getBoardsProfile,
   updateBoard
 } from "./sagas/Board"
-import { deletePin, getBoardsHasPin, getPin, getPins } from "./sagas/Pin"
+import {
+  deletePin,
+  getBoardsHasPin,
+  getPin,
+  getPins,
+  getPinsUser
+} from "./sagas/Pin"
 import { getProfile, updateProfile } from "./sagas/Profile"
 import { getAllPins, searchByTag, searchByUser } from "./sagas/Search"
 import { getTags } from "./sagas/Tag"
@@ -34,6 +40,7 @@ export default function* rootSaga() {
     getBoards(),
     getBoardsProfile(),
     getPins(),
+    getPinsUser(),
     getAllPins(),
     getPin(),
     getBoardsHasPin(),

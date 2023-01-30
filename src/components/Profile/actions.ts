@@ -13,6 +13,8 @@ import {
   GET_FOLLOWINGS_SUCCESS,
   GET_FOLLOWINGS_USER_FAILED,
   GET_FOLLOWINGS_USER_SUCCESS,
+  GET_PINS_USER_FAILED,
+  GET_PINS_USER_SUCCESS,
   GET_PROFILE_FAILED,
   GET_PROFILE_SUCCESS,
   UN_FOLLOW_USER_FAILED,
@@ -26,6 +28,7 @@ import {
   GET_FOLLOWERS_USER,
   GET_FOLLOWINGS,
   GET_FOLLOWINGS_USER,
+  GET_PINS_USER,
   GET_PROFILE,
   UN_FOLLOW_USER
 } from "./../../redux-saga/actions"
@@ -158,6 +161,21 @@ export const getFollowingsUser = (payload?: any, componentId?: string) => ({
     },
     failure: {
       type: GET_FOLLOWINGS_USER_FAILED
+    }
+  },
+  payload,
+  componentId,
+  loading: true
+})
+
+export const getPinsUser = (payload: any, componentId?: string) => ({
+  type: GET_PINS_USER,
+  response: {
+    success: {
+      type: GET_PINS_USER_SUCCESS
+    },
+    failure: {
+      type: GET_PINS_USER_FAILED
     }
   },
   payload,

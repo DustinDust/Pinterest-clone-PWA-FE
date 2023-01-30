@@ -14,6 +14,7 @@ import {
   GetFollowersUserResult,
   GetFollowingsResult,
   GetFollowingsUserResult,
+  GetPinsUserResult,
   GetProfileResult,
   UnFollowUserResult
 } from "components/Profile/reducers"
@@ -68,7 +69,8 @@ const rootReducer = combineReducers({
   addCommentResult: AddCommentResult,
   updateCommentResult: UpdateCommentResult,
   deleteCommentResult: DeleteCommentResult,
-  getNotiResult: GetNotiResult
+  getNotiResult: GetNotiResult,
+  getPinsUserResult: GetPinsUserResult
 })
 
 export type State = ReturnType<typeof rootReducer>

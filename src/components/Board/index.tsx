@@ -112,7 +112,7 @@ const Board = () => {
   const itemWidth =
     viewPort.width <= 600
       ? viewPort.width / 2
-      : Math.floor(viewPort.width / 200) - 1
+      : viewPort.width / Math.floor(viewPort.width / 200)
 
   return (
     <div className="board">
