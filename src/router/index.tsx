@@ -72,16 +72,30 @@ const Router = () => {
       Notification.requestPermission().then((permission) => {
         // If the user accepts, let's create a notification
         if (permission === "granted") {
-          const notification = new Notification("Pinterest", {
-            body: `${data.data.displayName} đã bắt đầu theo dõi bạn`,
-            icon: logo
-          })
-          notification.onclick = (event) => {
-            event.preventDefault()
-            window.open(
-              `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
-              "_blank"
-            )
+          if (data.event === "follow") {
+            const notification = new Notification("Pinterest", {
+              body: `${data.data.displayName} đã bắt đầu theo dõi bạn`,
+              icon: logo
+            })
+            notification.onclick = (event) => {
+              event.preventDefault()
+              window.open(
+                `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
+                "_blank"
+              )
+            }
+          } else if (data.event === "comment") {
+            const notification = new Notification("Pinterest", {
+              body: `${data.data.displayName} đã thêm một nhận xét vào ảnh của bạn`,
+              icon: logo
+            })
+            notification.onclick = (event) => {
+              event.preventDefault()
+              window.open(
+                `${process.env.REACT_APP_REST_ENDPOINT}/${data.data.id}`,
+                "_blank"
+              )
+            }
           }
           // …
         }
@@ -95,7 +109,6 @@ const Router = () => {
   useEffect(() => {
     if (id) {
       socket.on(`${id}`, (data) => {
-        console.log(data)
         notify(data)
       })
     }
