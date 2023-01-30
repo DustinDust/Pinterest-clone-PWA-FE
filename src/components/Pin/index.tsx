@@ -171,7 +171,7 @@ const Pin = () => {
   }, [])
 
   useEffect(() => {
-    if (followingsUser && followingsUser.following) {
+    if (followingsUser && followingsUser.following && pin && pin.user) {
       setIsFollowing(
         (followingsUser.following as Array<any>).some(
           (user) => user.id === Number(pin.user.id)
