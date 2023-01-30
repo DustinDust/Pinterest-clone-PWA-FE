@@ -88,33 +88,35 @@ const Comment = ({ comment }: { comment: any }) => {
           <div className="comment-time">
             {formatDistanceToNow(new Date(comment.updatedAt).getTime())}
           </div>
-          <div>
-            <Dot className="comment-dot" onClick={() => setOpen((i) => !i)} />
-            {open && (
-              <>
-                <div className="bg" onClick={() => setOpen(false)}></div>
-                <div className="tooltip">
-                  <div
-                    className="tooltip-item"
-                    onClick={() => {
-                      setUpdate(true)
-                      setOpen(false)
-                    }}
-                  >
-                    Chỉnh sửa
+          {comment.user.id === Number(localStorage.getItem("id")) && (
+            <div>
+              <Dot className="comment-dot" onClick={() => setOpen((i) => !i)} />
+              {open && (
+                <>
+                  <div className="bg" onClick={() => setOpen(false)}></div>
+                  <div className="tooltip">
+                    <div
+                      className="tooltip-item"
+                      onClick={() => {
+                        setUpdate(true)
+                        setOpen(false)
+                      }}
+                    >
+                      Chỉnh sửa
+                    </div>
+                    <div
+                      className="tooltip-item"
+                      onClick={() =>
+                        dispatch(deleteComment({ commentId: comment.id }))
+                      }
+                    >
+                      Xoá
+                    </div>
                   </div>
-                  <div
-                    className="tooltip-item"
-                    onClick={() =>
-                      dispatch(deleteComment({ commentId: comment.id }))
-                    }
-                  >
-                    Xoá
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
