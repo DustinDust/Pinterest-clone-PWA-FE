@@ -122,7 +122,7 @@ const Login = () => {
             {loginResult && !loginResult.success && (
               <div className="feedback">Tài khoản hoặc Mật khẩu không đúng</div>
             )}
-            <div className="forgot-password">Quên mật khẩu?</div>
+            {/* <div className="forgot-password">Quên mật khẩu?</div> */}
             <button
               type="submit"
               className={`button ${isValid && "valid"}`}
