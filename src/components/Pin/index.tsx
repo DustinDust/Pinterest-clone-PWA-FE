@@ -130,6 +130,8 @@ const Pin = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const inputRef = React.createRef<HTMLInputElement>()
+
   const [isFollowing, setIsFollowing] = useState(false)
 
   const followUserResult = useSelector((state: State) => state.followUserResult)
@@ -199,11 +201,11 @@ const Pin = () => {
 
   const handleComment = () => {
     dispatch(addComment({ content: comment, pinId: pinId }))
-    setComment("")
+    inputRef.current?.value ? (inputRef.current.value = "") : void 0
   }
 
   const handleCancelComment = () => {
-    setComment("")
+    inputRef.current?.value ? (inputRef.current.value = "") : void 0
   }
 
   return (
@@ -233,7 +235,7 @@ const Pin = () => {
             {pin.user.displayName && (
               <div className="user-name">{pin.user.displayName}</div>
             )}
-            {pin.user.followersCount && (
+            {pin.user.followersCount !== undefined && (
               <div>{pin.user.followersCount} người theo dõi</div>
             )}
           </div>
@@ -257,7 +259,7 @@ const Pin = () => {
               {pin.comments ? pin.comments.length : 0} nhận xét
             </div>
             {pin.comments.length > 0 &&
-              pin.comments.reverse().map((comment: unknown) => {
+              pin.comments.map((comment: unknown) => {
                 return <Comment comment={comment} key={(comment as any).id} />
               })}
           </>
@@ -267,6 +269,7 @@ const Pin = () => {
             className="comment-input"
             type="text"
             placeholder="Thêm nhận xét"
+            ref={inputRef}
             onChange={(e) => setComment(e.target.value)}
           />
           {comment && (

@@ -121,17 +121,30 @@ const Board = () => {
         {getPinsResult &&
           (getPinsResult?.response as unknown as BoardResponse).data.name}
       </div>
-      {pins && (
-        <Masonry
-          style={{ paddingBottom: "72px" }}
-          items={pins}
-          columnGutter={8} // Set khoảng cách giữa các column
-          columnWidth={itemWidth - 24} // Set chiều rộng tối thiểu là 300px
-          overscanBy={5} // Giá trị để render trước khi scroll tới
-          render={ImageCard} // Grid item của component
-          onRender={maybeLoadMore}
-        />
-      )}
+      {pins &&
+        (pins.length > 0 ? (
+          <Masonry
+            style={{ paddingBottom: "72px" }}
+            items={pins}
+            columnGutter={8} // Set khoảng cách giữa các column
+            columnWidth={itemWidth - 24} // Set chiều rộng tối thiểu là 300px
+            overscanBy={5} // Giá trị để render trước khi scroll tới
+            render={ImageCard} // Grid item của component
+            onRender={maybeLoadMore}
+          />
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              marginTop: "48px",
+              fontWeight: "600",
+              fontSize: "18px",
+              justifyContent: "center"
+            }}
+          >
+            Chưa có ghim nào trong bảng
+          </div>
+        ))}
     </div>
   )
 }

@@ -256,12 +256,26 @@ const Profile = () => {
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {boards &&
             boards.data &&
-            boards.data.map((board) => (
-              <BoardCard
-                style={{ width: itemWidth }}
-                key={board.id}
-                props={board}
-              />
+            (boards.data.length === 0 ? (
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "48px",
+                  fontWeight: "600",
+                  fontSize: "18px",
+                  justifyContent: "center"
+                }}
+              >
+                Chưa tạo bảng nào
+              </div>
+            ) : (
+              boards.data.map((board) => (
+                <BoardCard
+                  style={{ width: itemWidth }}
+                  key={board.id}
+                  props={board}
+                />
+              ))
             ))}
         </div>
       )}
