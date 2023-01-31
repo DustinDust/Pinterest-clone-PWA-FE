@@ -91,12 +91,4 @@ self.addEventListener("message", (event) => {
   }
 })
 
-registerRoute(
-  ({ url }) => url,
-  new StaleWhileRevalidate({
-    cacheName: "caches",
-    plugins: [new ExpirationPlugin({ maxEntries: 50 })]
-  })
-)
-
 // Any other custom service worker logic can go here.
